@@ -774,25 +774,36 @@ def GetFuncation_Result(num_list,index):
     pass
 
 def GetResult_02(num_list,index,mIndex):
-    result_list = Pre_Funcation_03_Rem_hundred(GetSum(index), num_list)
-    result_Rem_ten = Pre_Funcation_03_Rem_ten(GetSum(index), result_list)
-    result = Pre_Funcation_03_Rem_one(GetSum(index), result_Rem_ten)
+    sum=GetSum(index)
+    result_list = Pre_Funcation_03_Rem_hundred(sum, num_list)#去除百位
+    result_Rem_ten = Pre_Funcation_03_Rem_ten(sum, result_list)#去除十位
+    result = Pre_Funcation_03_Rem_one(sum, result_Rem_ten)#去除个位
     result_test_str_02 = List_2_Str(result)
-    test=Get_Remove_tenBit_combination(result_test_str_02,mIndex[1],index[1])
-    Show(test)
+    result_Remove_tenBit=Get_Remove_tenBit_combination(result_test_str_02,mIndex[1],index[1])#前两期去除组合
+    # Show(result_Remove_tenBit)
+
+    result_Remove_Way=GetResult_Rem_Way(result_Remove_tenBit,index)#路数去除组合
+    # Show(result_Remove_Way)
+
+    result_Remove_Sum_Way=GetResult_Sum_Way(result_Remove_Way,sum)#和尾去下一期两码组合
+    # Show(result_Remove_Sum_Way)
+
+    result_Remove_Sum_Befoe=GetResult_Sum_Way_Before(result_Remove_Sum_Way,sum)#和尾去前2组合
+    Show(result_Remove_Sum_Befoe)
+
     print("上上一期:", mIndex)
     print("上一期:", index)
     pass
 
+
 def Get_Remove_tenBit_combination(indexList,x,y):
     """
-    #去除上两期十位的组合,x和y是前两期十位上的数
+    #去除上两期十位的组合,x和y为键值
     :param indexList:
     :return:
     """
-    len_indexList=len(indexList)
     key = []
-    for i in range(len_indexList):
+    for i in range(len(indexList)):
         hundred = int(indexList[i]) // 100
         ten=(int(indexList[i]) // 10)%10
         one=int(indexList[i])%10
@@ -806,6 +817,297 @@ def Get_Remove_tenBit_combination(indexList,x,y):
     """
     result=[i for i in indexList if i not in key]
     return result
+    pass
+
+def Get_Remove_Sum_2bit_Before_combination(indexList,x,y):
+    """
+    #去除前两位组合(即百位和十位)
+    :param indexList:
+    :param x:百位
+    :param y:十位
+    :return:
+    """
+    key = []
+    for i in range(len(indexList)):
+        hundred = int(indexList[i]) // 100
+        ten = (int(indexList[i]) // 10) % 10
+        if hundred == x and ten == y:
+            # print(indexList[i])
+            key.append(indexList[i])
+        pass
+    result = [i for i in indexList if i not in key]#获取两个list的差集:
+    return result
+    pass
+
+def Get_Remove_Sum_2bit_After_combination(indexList,x,y):
+    """
+    #去除后两位组合(即十位和个位)
+    :param indexList:
+    :param x:是位
+    :param y:个位
+    :return:
+    """
+    key = []
+    for i in range(len(indexList)):
+        ten = (int(indexList[i]) // 10) % 10
+        one = int(indexList[i]) % 10
+        if ten == x and one == y:
+            # print(indexList[i])
+            key.append(indexList[i])
+        pass
+    result = [i for i in indexList if i not in key]#获取两个list的差集:
+    return result
+    pass
+
+def GetResult_Rem_Way(num_list,index):
+    """
+    #路数去除下一期
+    #0路:0,3,6,9
+    #1路:1,4,7
+    #2路:2,5,8
+    :param num_list:
+    :param index:上一期号码
+    :return:
+    """
+    index_way=""
+    for i in range(len(index)):
+        if index[i] == 0 or index[i] == 3 or index[i] == 6 or index[i] == 9:
+            index_way += "0"
+            pass
+        if index[i] == 1 or index[i] == 4 or index[i] == 7:
+            index_way += "1"
+            pass
+        if index[i] == 2 or index[i] == 5 or index[i] == 8:
+            index_way += "2"
+        pass
+    # print("路数:",index_way)
+    mReturnList=[]
+    match index_way:
+        case "000":
+            """
+            #000:去掉?13,13?,?19,19?
+            """
+            mRList = Get_Remove_tenBit_combination(num_list, 1, 3)
+            mReturnList = Get_Remove_tenBit_combination(mRList, 1, 9)
+            pass
+        case "001":
+            mRList = Get_Remove_tenBit_combination(num_list, 0, 6)
+            mReturnList = Get_Remove_tenBit_combination(mRList, 0, 7)
+            pass
+        case "002":
+            mRList = Get_Remove_tenBit_combination(num_list, 2, 7)
+            mReturnList = Get_Remove_tenBit_combination(mRList, 3, 8)
+            pass
+        case "010":
+            mRList = Get_Remove_tenBit_combination(num_list, 0, 7)
+            mReturnList = Get_Remove_tenBit_combination(mRList, 3, 0)
+            pass
+        case "011":
+            mRList = Get_Remove_tenBit_combination(num_list, 2, 4)
+            mReturnList = Get_Remove_tenBit_combination(mRList, 2, 6)
+            pass
+        case "012":
+            mRList = Get_Remove_tenBit_combination(num_list, 3, 8)
+            mReturnList = Get_Remove_tenBit_combination(mRList, 6, 0)
+            pass
+        case "020":
+            mRList = Get_Remove_tenBit_combination(num_list, 2, 2)
+            mReturnList = Get_Remove_tenBit_combination(mRList, 4, 8)
+            pass
+        case "021":
+            mRList = Get_Remove_tenBit_combination(num_list, 0, 6)
+            mReturnList = Get_Remove_tenBit_combination(mRList, 4, 1)
+            pass
+        case "022":
+            mRList = Get_Remove_tenBit_combination(num_list, 0, 3)
+            mReturnList = Get_Remove_tenBit_combination(mRList, 2, 2)
+            pass
+        case "100":
+            mRList = Get_Remove_tenBit_combination(num_list, 1, 6)
+            mReturnList = Get_Remove_tenBit_combination(mRList, 2, 3)
+            pass
+        case "101":
+            mRList = Get_Remove_tenBit_combination(num_list, 1, 3)
+            mReturnList = Get_Remove_tenBit_combination(mRList, 2, 3)
+            pass
+        case "102":
+            mRList = Get_Remove_tenBit_combination(num_list, 1, 6)
+            mReturnList = Get_Remove_tenBit_combination(mRList, 3, 3)
+            pass
+        case "110":
+            mRList = Get_Remove_tenBit_combination(num_list, 0, 9)
+            mReturnList = Get_Remove_tenBit_combination(mRList, 4, 1)
+            pass
+        case "111":
+            mRList = Get_Remove_tenBit_combination(num_list, 1, 8)
+            mReturnList = Get_Remove_tenBit_combination(mRList, 2, 8)
+            pass
+        case "112":
+            mRList = Get_Remove_tenBit_combination(num_list, 4, 3)
+            mReturnList = Get_Remove_tenBit_combination(mRList, 4, 5)
+            pass
+        case "120":
+            mRList = Get_Remove_tenBit_combination(num_list, 0, 1)
+            mReturnList = Get_Remove_tenBit_combination(mRList, 0, 2)
+            pass
+        case "121":
+            """
+            #121路数:去掉?17,17?,?23,23?
+            """
+            # print("路数:", index_way)
+            mRList=Get_Remove_tenBit_combination(num_list,1,7)
+            mReturnList=Get_Remove_tenBit_combination(mRList,2,3)
+            pass
+        case "122":
+            mRList = Get_Remove_tenBit_combination(num_list, 1, 2)
+            mReturnList = Get_Remove_tenBit_combination(mRList, 2, 5)
+            pass
+        case "200":
+            mRList = Get_Remove_tenBit_combination(num_list, 1, 7)
+            mReturnList = Get_Remove_tenBit_combination(mRList, 2, 5)
+            pass
+        case "201":
+            mRList = Get_Remove_tenBit_combination(num_list, 3, 0)
+            mReturnList = Get_Remove_tenBit_combination(mRList, 4, 1)
+            pass
+        case "202":
+            mRList = Get_Remove_tenBit_combination(num_list, 4, 3)
+            mReturnList = Get_Remove_tenBit_combination(mRList, 6, 0)
+            pass
+        case "210":
+            mRList = Get_Remove_tenBit_combination(num_list, 1, 7)
+            mReturnList = Get_Remove_tenBit_combination(mRList, 2, 9)
+            pass
+        case "211":
+            mRList = Get_Remove_tenBit_combination(num_list, 1, 5)
+            mReturnList = Get_Remove_tenBit_combination(mRList, 5, 4)
+            pass
+        case "212":
+            mRList = Get_Remove_tenBit_combination(num_list, 1, 0)
+            mReturnList = Get_Remove_tenBit_combination(mRList, 4, 6)
+            pass
+        case "220":
+            mRList = Get_Remove_tenBit_combination(num_list, 1, 8)
+            mReturnList = Get_Remove_tenBit_combination(mRList, 5, 1)
+            pass
+        case "221":
+            mRList = Get_Remove_tenBit_combination(num_list, 3, 2)
+            mReturnList = Get_Remove_tenBit_combination(mRList, 3, 3)
+            pass
+        case "222":
+            mRList = Get_Remove_tenBit_combination(num_list, 1, 7)
+            mReturnList = Get_Remove_tenBit_combination(mRList, 1, 8)
+            pass
+
+    return mReturnList
+    pass
+
+def GetResult_Sum_Way(num_list,sum):
+    """
+    #和值去下一期两码组合
+    :param num_list:
+    :param sum:
+    :return:
+    """
+    mReturnList_Sum = []
+    match sum:
+        case 0:
+            """
+            #上一期和尾:0,去除?22,22?,?56,56?
+            """
+            sum_mRList = Get_Remove_tenBit_combination(num_list, 2, 2)
+            mReturnList_Sum = Get_Remove_tenBit_combination(sum_mRList, 5, 6)
+            pass
+        case 1:
+            sum_mRList = Get_Remove_tenBit_combination(num_list, 3, 3)
+            mReturnList_Sum = Get_Remove_tenBit_combination(sum_mRList, 6, 9)
+            pass
+        case 2:
+            sum_mRList = Get_Remove_tenBit_combination(num_list, 2, 7)
+            mReturnList_Sum = Get_Remove_tenBit_combination(sum_mRList, 3, 6)
+            pass
+        case 3:
+            sum_mRList = Get_Remove_tenBit_combination(num_list, 2, 6)
+            mReturnList_Sum = Get_Remove_tenBit_combination(sum_mRList, 9, 9)
+            pass
+        case 4:
+            sum_mRList = Get_Remove_tenBit_combination(num_list, 2, 5)
+            mReturnList_Sum = Get_Remove_tenBit_combination(sum_mRList, 4, 6)
+            pass
+        case 5:
+            sum_mRList = Get_Remove_tenBit_combination(num_list, 3, 9)
+            mReturnList_Sum = Get_Remove_tenBit_combination(sum_mRList, 7, 9)
+            pass
+        case 6:
+            sum_mRList = Get_Remove_tenBit_combination(num_list, 1, 7)
+            mReturnList_Sum = Get_Remove_tenBit_combination(sum_mRList, 2, 4)
+            pass
+        case 7:
+            sum_mRList = Get_Remove_tenBit_combination(num_list, 0, 4)
+            mReturnList_Sum = Get_Remove_tenBit_combination(sum_mRList, 3, 8)
+            pass
+        case 8:
+            sum_mRList = Get_Remove_tenBit_combination(num_list, 2, 5)
+            mReturnList_Sum = Get_Remove_tenBit_combination(sum_mRList, 4, 4)
+            pass
+        case 9:
+            sum_mRList = Get_Remove_tenBit_combination(num_list, 4, 6)
+            mReturnList_Sum = Get_Remove_tenBit_combination(sum_mRList, 6, 7)
+            pass
+    return mReturnList_Sum
+    pass
+
+def GetResult_Sum_Way_Before(num_list,sum):
+    """
+    #根据和值去除前两位组合
+    :param num_list:
+    :param sum:
+    :return:
+    """
+    mReturnList_Sum = []
+    match sum:
+        case 0:
+            #和尾为0,去掉34?,65?
+            sum_list_before=Get_Remove_Sum_2bit_Before_combination(num_list,3,4)
+            mReturnList_Sum = Get_Remove_Sum_2bit_Before_combination(sum_list_before, 6, 5)
+            pass
+        case 1:
+            sum_list_before = Get_Remove_Sum_2bit_Before_combination(num_list, 1, 2)
+            mReturnList_Sum = Get_Remove_Sum_2bit_Before_combination(sum_list_before, 4, 8)
+            pass
+        case 2:
+            sum_list_before = Get_Remove_Sum_2bit_Before_combination(num_list, 2, 0)
+            mReturnList_Sum = Get_Remove_Sum_2bit_Before_combination(sum_list_before, 2, 9)
+            pass
+        case 3:
+            sum_list_before = Get_Remove_Sum_2bit_Before_combination(num_list, 3, 7)
+            mReturnList_Sum = Get_Remove_Sum_2bit_Before_combination(sum_list_before, 4, 2)
+            pass
+        case 4:
+            sum_list_before = Get_Remove_Sum_2bit_Before_combination(num_list, 2, 6)
+            mReturnList_Sum = Get_Remove_Sum_2bit_Before_combination(sum_list_before, 9, 6)
+            pass
+        case 5:
+            sum_list_before = Get_Remove_Sum_2bit_Before_combination(num_list, 3, 9)
+            mReturnList_Sum = Get_Remove_Sum_2bit_Before_combination(sum_list_before, 4, 7)
+            pass
+        case 6:
+            sum_list_before = Get_Remove_Sum_2bit_Before_combination(num_list, 1, 9)
+            mReturnList_Sum = Get_Remove_Sum_2bit_Before_combination(sum_list_before, 7, 6)
+            pass
+        case 7:
+            sum_list_before = Get_Remove_Sum_2bit_Before_combination(num_list, 5, 8)
+            mReturnList_Sum = Get_Remove_Sum_2bit_Before_combination(sum_list_before, 6, 1)
+            pass
+        case 8:
+            sum_list_before = Get_Remove_Sum_2bit_Before_combination(num_list, 0, 9)
+            mReturnList_Sum = Get_Remove_Sum_2bit_Before_combination(sum_list_before, 2, 3)
+            pass
+        case 9:
+            sum_list_before = Get_Remove_Sum_2bit_Before_combination(num_list, 1, 8)
+            mReturnList_Sum = Get_Remove_Sum_2bit_Before_combination(sum_list_before, 4, 6)
+            pass
+    return mReturnList_Sum
     pass
 
 def main():
