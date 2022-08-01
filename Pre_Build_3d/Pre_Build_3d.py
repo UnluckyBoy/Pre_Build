@@ -77,6 +77,17 @@ def Get_Way(index):
     return index_way
     pass
 
+def Get_List_Difference_set(index_list,remove_list):
+    """
+    #获取两个list的差集
+    :param index_list:原list
+    :param remove_list:被删除list
+    :return:
+    """
+    result = [i for i in index_list if i not in remove_list]
+    return result
+    pass
+
 def Get_Way_Remove_combination(num_list,way_index):
     """
     #根据和尾杀下期012路特征,只杀221,201,210,001,202,121,021,112,010路
@@ -908,25 +919,35 @@ def GetResult_02(num_list,index,mIndex):
     sum=GetSum(index)
     result_list = Pre_Funcation_03_Rem_hundred(sum, num_list)#去除百位
     result_Rem_ten = Pre_Funcation_03_Rem_ten(sum, result_list)#去除十位
+    result_Rem_ten_01 = Remove_tenBit((sum * 3 + (index[2] + 3)) % 10, List_2_Str(result_list))  # 去除十位,方法2
     result = Pre_Funcation_03_Rem_one(sum, result_Rem_ten)#去除个位
     result_test_str_02 = List_2_Str(result)
     result_Remove_tenBit=Get_Remove_tenBit_combination(result_test_str_02,mIndex[1],index[1])#前两期去除组合
     Show(result_Remove_tenBit)
-
     result_Remove_Way=GetResult_Rem_Way(result_Remove_tenBit,index)#路数去除组合
     Show(result_Remove_Way)
-
     result_Remove_Sum_Way=GetResult_Sum_Way(result_Remove_Way,sum)#和尾去下一期两码组合
     Show(result_Remove_Sum_Way)
 
+
     result_Remove_Sum_Befoe=GetResult_Sum_Way_Before(result_Remove_Sum_Way,sum)#和尾去前2组合
-    Show(result_Remove_Sum_Befoe)
-
+    # Show(result_Remove_Sum_Befoe)
+    #
     result_Remove_Sum_After=GetResult_Sum_Way_After(result_Remove_Sum_Befoe,sum)#和尾去后2组合
-    Show(result_Remove_Sum_After)
-
+    # Show(result_Remove_Sum_After)
+    #
     result_Remove_Way_Sum=GetResult_Sum_Way_Remove(result_Remove_Sum_After,sum)#和尾去012
-    Show(result_Remove_Way_Sum)
+    # Show(result_Remove_Way_Sum)
+
+    sum_temp_01 = sum+(3 * index[0] + index[1]) % 6
+    print("上期和值+(3*百位+十位)%6:", sum_temp_01)
+    result_Sum_Hundred_ten_01=GetResult_Sum_Hundred_ten(result_Remove_Way_Sum,sum_temp_01)
+    Show(result_Sum_Hundred_ten_01)
+
+    sum_temp_02 = sum + (4 * index[0] + 9*index[1]) % 6
+    print("上期和值+(4*百位+9*十位)%6:", sum_temp_02)
+    result_Sum_Hundred_ten_02 = GetResult_Sum_Hundred_ten(result_Sum_Hundred_ten_01, sum_temp_02)
+    Show(result_Sum_Hundred_ten_02)
 
     print("上上一期:", mIndex)
     print("上一期:", index)
@@ -1337,12 +1358,51 @@ def GetResult_Sum_Way_Remove(num_list,sum):
     return result_re
     pass
 
+def GetResult_Sum_Hundred_ten(num_list,sum):
+    """
+    #上期和值获得下期和值
+    :param num_list:
+    :param sum:
+    :return:
+    """
+    remove_list=[]
+    # sum+=(3*index[0]+index[1])%6
+    # print("上期和值+(3*百位+十位)%6:",sum)
+    for i in range(len(num_list)):
+        hundred = int(num_list[i]) // 100
+        ten = (int(num_list[i]) // 10) % 10
+        one = int(num_list[i]) % 10
+        if (hundred+ten+one)%10==sum:
+            remove_list.append(num_list[i])
+            pass
+        pass
+    result = Get_List_Difference_set(num_list,remove_list)
+    return result
+    pass
+
+def Remove_tenBit(sum,num_list):
+    """
+    :param sum:#上期和尾*3+(上期个位+3)去十位
+    :param num_list:
+    :return:
+    """
+    remove_list = []
+    for i in range(len(num_list)):
+        ten = (int(num_list[i]) // 10) % 10
+        if ten == sum:
+            remove_list.append(num_list[i])
+            pass
+        pass
+    result = Get_List_Difference_set(num_list, remove_list)
+    return result
+    pass
+
 def main():
     num_list=Pre_Build_num()
     #上一期号数
-    index=[0,3,9]
+    index=[4,2,6]
     #上上期
-    mIndex=[6,0,0]
+    mIndex=[0,6,0]
 
     #GetFuncation_Result(num_list,index)#调用结果方法函数
 
