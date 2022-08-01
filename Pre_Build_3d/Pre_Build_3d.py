@@ -59,7 +59,7 @@ def GetSum(index):
 
 def GetSubtraction(index_01,index_02):
     """
-    #取相减和值
+    #取相减和值(绝对值)
     :param index_01:
     :param index_02:
     :return:
@@ -114,6 +114,7 @@ def Remove_ten_bit_cycle(index_list,index):
     #循环杀十位数码
     #取数长度公共公式:start=index*10+90*i;end=(index+1)*10+90*i
     :param index_list:
+    :param index:去除的目标数
     :return:
     """
     result_list=[]
@@ -132,7 +133,7 @@ def Remove_one_bit_cycle(index_list,index):
     #循环杀个位数码
     #取数长度公共公式:start=index+9*i;end=(index+1)+9*i
     :param index_list:
-    :param index:
+    :param index:去除的目标数
     :return:
     """
     result_list = []
@@ -452,6 +453,150 @@ def Pre_Funcation_02(sum,num_List):
     return result_f2_list
     pass
 
+def Pre_Funcation_03_Rem_ten(sum_index,num_List):
+    """
+    #方法三:和尾*3，取尾去十位(去除同尾的数)
+    :param sum:
+    :param num_List:
+    :return:
+    """
+    list_spilt_str = Spilt_list(num_List)  ##调用拆分list公共方法
+    sum=(sum_index*3)%10
+    print("***和尾*3去十位***__和值尾为:",sum)
+    result_f3_list = []
+    match sum:
+        case 0:
+            result_f3_list = Remove_ten_bit_cycle(list_spilt_str, 0)
+            pass
+        case 1:
+            result_f3_list = Remove_ten_bit_cycle(list_spilt_str, 1)
+            pass
+        case 2:
+            result_f3_list=Remove_ten_bit_cycle(list_spilt_str,2)
+            # print(result_f3_list)
+            pass
+        case 3:
+            result_f3_list = Remove_ten_bit_cycle(list_spilt_str, 3)
+            pass
+        case 4:
+            result_f3_list = Remove_ten_bit_cycle(list_spilt_str, 4)
+            pass
+        case 5:
+            result_f3_list = Remove_ten_bit_cycle(list_spilt_str, 5)
+            pass
+        case 6:
+            result_f3_list = Remove_ten_bit_cycle(list_spilt_str,6)
+            pass
+        case 7:
+            result_f3_list = Remove_ten_bit_cycle(list_spilt_str, 7)
+            pass
+        case 8:
+            result_f3_list = Remove_ten_bit_cycle(list_spilt_str, 8)
+            pass
+        case 9:
+            result_f3_list = Remove_ten_bit_cycle(list_spilt_str, 9)
+            pass
+    return result_f3_list
+    pass
+
+def Pre_Funcation_03_Rem_one(sum_index,num_List):
+    """
+    #方法三:和尾*3+3，取尾去个位
+    :param sum:
+    :param num_List:
+    :return:
+    """
+    list_2_str = Spilt_list(num_List)  ##调用拆分list公共方法
+    sum = (sum_index * 3+3) % 10
+    print("***和尾*3+3去个位***__和值尾为:", sum)
+    result_f3 = []
+    match sum:
+        case 0:
+            result_f3 = Remove_one_bit_cycle(list_2_str, 0)
+            pass
+        case 1:
+            result_f3 = Remove_one_bit_cycle(list_2_str, 1)
+            pass
+        case 2:
+            result_f3 = Remove_one_bit_cycle(list_2_str, 2)
+            # print(result_f3_list)
+            pass
+        case 3:
+            result_f3 = Remove_one_bit_cycle(list_2_str, 3)
+            pass
+        case 4:
+            result_f3 = Remove_one_bit_cycle(list_2_str, 4)
+            pass
+        case 5:
+            result_f3 = Remove_one_bit_cycle(list_2_str, 5)
+            pass
+        case 6:
+            result_f3 = Remove_one_bit_cycle(list_2_str, 6)
+            pass
+        case 7:
+            result_f3 = Remove_one_bit_cycle(list_2_str, 7)
+            pass
+        case 8:
+            result_f3 = Remove_one_bit_cycle(list_2_str, 8)
+            pass
+        case 9:
+            result_f3 = Remove_one_bit_cycle(list_2_str, 9)
+            pass
+    return result_f3
+    pass
+
+def Pre_Funcation_03_Rem_hundred(sum_index,num_List):
+    """
+    #方法三:和尾加减2(偶数+2，奇数-2)
+    :param sum:
+    :param num_List:
+    :return:
+    """
+    result_List = Spilt_list(num_List)  ##调用拆分list公共方法
+    sumKey=sum_index%2
+    if sumKey==0:
+        sum = (sum_index+2) % 10
+        pass
+    else:
+        sum = GetSubtraction(sum_index, 2)
+        pass
+    print("***和尾加减2(偶数+2，奇数-2)去百位***__和值尾为:", sum)
+    result = []
+    match sum:
+        case 0:
+            result = Remove_Bit_list(result_List, 0,100)
+            pass
+        case 1:
+            result = Remove_Bit_list(result_List, 100,200)
+            pass
+        case 2:
+            result = Remove_Bit_list(result_List, 200,300)
+            # print(result_f3_list)
+            pass
+        case 3:
+            result = Remove_Bit_list(result_List, 300,400)
+            pass
+        case 4:
+            result = Remove_Bit_list(result_List, 400,500)
+            pass
+        case 5:
+            result = Remove_Bit_list(result_List, 500,600)
+            pass
+        case 6:
+            result = Remove_Bit_list(result_List, 600,700)
+            pass
+        case 7:
+            result = Remove_Bit_list(result_List, 700,800)
+            pass
+        case 8:
+            result = Remove_Bit_list(result_List, 800,900)
+            pass
+        case 9:
+            result = Remove_Bit_list(result_List, 900,1000)
+            pass
+    return result
+    pass
+
 def Remove_duplicate(mList):
     """
     #去除list中重复项
@@ -480,45 +625,43 @@ def Show(mList):
         str_show+=str(mList[i])+" "
         pass
     print(str_show)
-    print("长度:",len(mList))
+    print("数量:",len(mList))
     pass
 
-def main():
-    num_list=Pre_Build_num()
-    #上一期号数
-    index=[1,4,1]
+def GetFuncation_Result(num_list,index):
 
     ##方法:***根据合值去下期百位、十位、个位
-    result_01=Pre_Funcation_01(index,num_list)
-    result_01_str=List_2_Str(result_01)
-    print("此方法规则:\n","****根据合值杀下期百位****\n","*当合值为0时，下期百位杀3*\n","*当合值为1时，下期百位杀9*\n",
-          "*当合值为2时，下期百位杀2*\n","*当合值为3时，下期百位杀9*\n","*当合值为4时，下期百位杀6*\n",
-          "*当合值为5时，下期百位杀4*\n","*当合值为6时，下期百位杀1*\n","*当合值为7时，下期百位杀7*\n",
-          "*当合值为8时，下期百位杀0*\n","*当合值为9时，下期百位杀6*\n","****根据合值杀下期十位****\n",
-          "*当合值为0时，下期十位杀5*\n","*当合值为1时，下期十位杀0*\n","*当合值为2时，下期十位杀0*\n",
-          "*当合值为3时，下期十位杀2*\n","*当合值为4时，下期十位杀6*\n","*当合值为5时，下期十位杀7*\n",
-          "*当合值为6时，下期十位杀9*\n","*当合值为7时，下期十位杀8*\n","*当合值为8时，下期十位杀5*\n",
-          "*当合值为9时，下期十位杀4*\n","****根据合值杀下期个位****\n","当合值为0时，下期个位杀6*\n",
-          "*当合值为1时，下期个位杀8*\n","*当合值为2时，下期个位杀3*\n","*当合值为3时，下期个位杀2*\n",
-          "*当合值为4时，下期个位杀7*\n","*当合值为5时，下期个位杀2*\n","*当合值为6时，下期个位杀0*\n",
-          "*当合值为7时，下期个位杀1*\n","*当合值为8时，下期个位杀4*\n","*当合值为9时，下期个位杀4*\n")
+    result_01 = Pre_Funcation_01(index, num_list)
+    result_01_str = List_2_Str(result_01)
+    print("此方法规则:\n", "****根据合值杀下期百位****\n", "*当合值为0时，下期百位杀3*\n", "*当合值为1时，下期百位杀9*\n",
+          "*当合值为2时，下期百位杀2*\n", "*当合值为3时，下期百位杀9*\n", "*当合值为4时，下期百位杀6*\n",
+          "*当合值为5时，下期百位杀4*\n", "*当合值为6时，下期百位杀1*\n", "*当合值为7时，下期百位杀7*\n",
+          "*当合值为8时，下期百位杀0*\n", "*当合值为9时，下期百位杀6*\n", "****根据合值杀下期十位****\n",
+          "*当合值为0时，下期十位杀5*\n", "*当合值为1时，下期十位杀0*\n", "*当合值为2时，下期十位杀0*\n",
+          "*当合值为3时，下期十位杀2*\n", "*当合值为4时，下期十位杀6*\n", "*当合值为5时，下期十位杀7*\n",
+          "*当合值为6时，下期十位杀9*\n", "*当合值为7时，下期十位杀8*\n", "*当合值为8时，下期十位杀5*\n",
+          "*当合值为9时，下期十位杀4*\n", "****根据合值杀下期个位****\n", "当合值为0时，下期个位杀6*\n",
+          "*当合值为1时，下期个位杀8*\n", "*当合值为2时，下期个位杀3*\n", "*当合值为3时，下期个位杀2*\n",
+          "*当合值为4时，下期个位杀7*\n", "*当合值为5时，下期个位杀2*\n", "*当合值为6时，下期个位杀0*\n",
+          "*当合值为7时，下期个位杀1*\n", "*当合值为8时，下期个位杀4*\n", "*当合值为9时，下期个位杀4*\n")
+
     print("___结果:")
-    Show(result_01_str)#显示
+    Show(result_01_str)  # 显示
     print("上一期:", index)
 
     ##方法:***和值尾数去重***
-    sum_f2_01=GetSum(index)
-    result_02=Pre_Funcation_02(sum_f2_01, num_list)
+    sum_f2_01 = GetSum(index)
+    result_02 = Pre_Funcation_02(sum_f2_01, num_list)
     result_02_str = List_2_Str(result_02)
-    print("\n方法:***和值尾数去码***_尾数:", sum_f2_01,"\n___结果:")
+    print("\n方法:***和值尾数去码***_尾数:", sum_f2_01, "\n___结果:")
     Show(result_02_str)  # 显示
     print("上一期:", index)
 
     ##方法:***和值尾*3尾数去码***
-    sum_f2_02=(GetSum(index)*3)%10
-    result_03=Pre_Funcation_02(sum_f2_02, num_list)
+    sum_f2_02 = (GetSum(index) * 3) % 10
+    result_03 = Pre_Funcation_02(sum_f2_02, num_list)
     result_03_str = List_2_Str(result_03)
-    print("\n方法:***和值尾*3尾数去码***_尾数:", sum_f2_02,"\n___结果:")
+    print("\n方法:***和值尾*3尾数去码***_尾数:", sum_f2_02, "\n___结果:")
     Show(result_03_str)  # 显示
     print("上一期:", index)
 
@@ -526,7 +669,7 @@ def main():
     sum_f2_03 = (GetSum(index) * 4) % 10
     result_04 = Pre_Funcation_02(sum_f2_03, num_list)
     result_04_str = List_2_Str(result_04)
-    print("\n方法:***和值尾*4尾数去码***_尾数:", sum_f2_03,"\n___结果:")
+    print("\n方法:***和值尾*4尾数去码***_尾数:", sum_f2_03, "\n___结果:")
     Show(result_04_str)  # 显示
     print("上一期:", index)
 
@@ -534,13 +677,13 @@ def main():
     sum_f2_04 = (GetSum(index) * 5) % 10
     result_05 = Pre_Funcation_02(sum_f2_04, num_list)
     result_05_str = List_2_Str(result_05)
-    print("\n方法:***和值尾*5尾数去码***_尾数:", sum_f2_04,"\n___结果:")
+    print("\n方法:***和值尾*5尾数去码***_尾数:", sum_f2_04, "\n___结果:")
     Show(result_05_str)  # 显示
     print("上一期:", index)
 
     ##百位减个位尾数去码
-    sum_f3_01=GetSubtraction(index[0],index[2])
-    result_06=Pre_Funcation_02(sum_f3_01, num_list)
+    sum_f3_01 = GetSubtraction(index[0], index[2])
+    result_06 = Pre_Funcation_02(sum_f3_01, num_list)
     result_06_str = List_2_Str(result_06)
     print("\n方法:***百位减个位尾数去码***_尾数:", sum_f3_01, "\n___结果:")
     Show(result_06_str)  # 显示
@@ -579,7 +722,7 @@ def main():
     print("上一期:", index)
 
     ##和数除8的余数去码
-    sum=(index[0]+index[1]+index[2])%8
+    sum = (index[0] + index[1] + index[2]) % 8
     result_11 = Pre_Funcation_02(sum, num_list)
     result_11_str = List_2_Str(result_11)
     print("\n方法:***和数除8的余数去码***_尾数:", sum, "\n___结果:")
@@ -595,7 +738,7 @@ def main():
     print("上一期:", index)
 
     ##个位*个位尾数去码
-    sum_f5_01=GetSquare(index[2])
+    sum_f5_01 = GetSquare(index[2])
     result_13 = Pre_Funcation_02(sum_f5_01, num_list)
     result_13_str = List_2_Str(result_13)
     print("\n方法:***个位*个位尾数去码***_尾数:", sum_f5_01, "\n___结果:")
@@ -619,15 +762,63 @@ def main():
     print("上一期:", index)
 
     ###整理所有结果，去重###
-    mFinish_Result=[]
-    mFinish_Result=result_01_str+result_02_str+result_03_str+result_03_str+result_04_str+result_05_str\
-                   +result_06_str+result_07_str+result_08_str+result_09_str+result_10_str+result_11_str\
-                   +result_12_str+result_13_str+result_14_str+result_15_str
-    mResult_Remove_duplicate=Remove_duplicate(mFinish_Result)
+    mFinish_Result = []
+    mFinish_Result = result_01_str + result_02_str + result_03_str + result_03_str + result_04_str + result_05_str \
+                     + result_06_str + result_07_str + result_08_str + result_09_str + result_10_str + result_11_str \
+                     + result_12_str + result_13_str + result_14_str + result_15_str
+    mResult_Remove_duplicate = Remove_duplicate(mFinish_Result)
     print("去重前:")
     Show(mFinish_Result)
     print("去重后:")
     Show(mResult_Remove_duplicate)
+    pass
+
+def GetResult_02(num_list,index,mIndex):
+    result_list = Pre_Funcation_03_Rem_hundred(GetSum(index), num_list)
+    result_Rem_ten = Pre_Funcation_03_Rem_ten(GetSum(index), result_list)
+    result = Pre_Funcation_03_Rem_one(GetSum(index), result_Rem_ten)
+    result_test_str_02 = List_2_Str(result)
+    test=Get_Remove_tenBit_combination(result_test_str_02,mIndex[1],index[1])
+    Show(test)
+    print("上上一期:", mIndex)
+    print("上一期:", index)
+    pass
+
+def Get_Remove_tenBit_combination(indexList,x,y):
+    """
+    #去除上两期十位的组合,x和y是前两期十位上的数
+    :param indexList:
+    :return:
+    """
+    len_indexList=len(indexList)
+    key = []
+    for i in range(len_indexList):
+        hundred = int(indexList[i]) // 100
+        ten=(int(indexList[i]) // 10)%10
+        one=int(indexList[i])%10
+        if hundred==x and ten==y or ten==x and one==y:
+            # print(indexList[i])
+            key.append(indexList[i])
+        pass
+    """
+    #获取两个list的差集:
+    #result=[i for i in A if i not in B]#元素在A里，但不在B里
+    """
+    result=[i for i in indexList if i not in key]
+    return result
+    pass
+
+def main():
+    num_list=Pre_Build_num()
+    #上一期号数
+    index=[1,8,1]
+    #上上期
+    mIndex=[6,1,9]
+
+    #GetFuncation_Result(num_list,index)#调用结果方法函数
+
+    GetResult_02(num_list, index,mIndex)
+
     pass
 
 if __name__=='__main__':
