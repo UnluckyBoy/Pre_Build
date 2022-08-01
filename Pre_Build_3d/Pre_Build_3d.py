@@ -911,21 +911,21 @@ def GetResult_02(num_list,index,mIndex):
     result = Pre_Funcation_03_Rem_one(sum, result_Rem_ten)#去除个位
     result_test_str_02 = List_2_Str(result)
     result_Remove_tenBit=Get_Remove_tenBit_combination(result_test_str_02,mIndex[1],index[1])#前两期去除组合
-    # Show(result_Remove_tenBit)
+    Show(result_Remove_tenBit)
 
     result_Remove_Way=GetResult_Rem_Way(result_Remove_tenBit,index)#路数去除组合
-    # Show(result_Remove_Way)
+    Show(result_Remove_Way)
 
     result_Remove_Sum_Way=GetResult_Sum_Way(result_Remove_Way,sum)#和尾去下一期两码组合
-    # Show(result_Remove_Sum_Way)
+    Show(result_Remove_Sum_Way)
 
     result_Remove_Sum_Befoe=GetResult_Sum_Way_Before(result_Remove_Sum_Way,sum)#和尾去前2组合
-    #和尾去前2组合
+    Show(result_Remove_Sum_Befoe)
 
     result_Remove_Sum_After=GetResult_Sum_Way_After(result_Remove_Sum_Befoe,sum)#和尾去后2组合
-    # Show(result_Remove_Sum_After)
+    Show(result_Remove_Sum_After)
 
-    result_Remove_Way_Sum=GetResult_Sum_Way_Remove(result_Remove_Sum_After,sum)
+    result_Remove_Way_Sum=GetResult_Sum_Way_Remove(result_Remove_Sum_After,sum)#和尾去012
     Show(result_Remove_Way_Sum)
 
     print("上上一期:", mIndex)
@@ -1340,9 +1340,9 @@ def GetResult_Sum_Way_Remove(num_list,sum):
 def main():
     num_list=Pre_Build_num()
     #上一期号数
-    index=[1,8,1]
+    index=[0,3,9]
     #上上期
-    mIndex=[6,1,9]
+    mIndex=[6,0,0]
 
     #GetFuncation_Result(num_list,index)#调用结果方法函数
 
