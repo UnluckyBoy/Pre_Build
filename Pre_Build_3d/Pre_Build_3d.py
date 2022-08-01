@@ -57,6 +57,137 @@ def GetSum(index):
     return sum
     pass
 
+def Get_Way(index):
+    """
+    #将上一期号码转为012路
+    :param index:
+    :return:
+    """
+    index_way = ""
+    for i in range(len(index)):
+        if index[i] == 0 or index[i] == 3 or index[i] == 6 or index[i] == 9:
+            index_way += "0"
+            pass
+        if index[i] == 1 or index[i] == 4 or index[i] == 7:
+            index_way += "1"
+            pass
+        if index[i] == 2 or index[i] == 5 or index[i] == 8:
+            index_way += "2"
+        pass
+    return index_way
+    pass
+
+def Get_Way_Remove_combination(num_list,way_index):
+    """
+    #根据和尾杀下期012路特征,只杀221,201,210,001,202,121,021,112,010路
+    :param num_list:
+    :param way_index:
+    :return:
+    """
+    key_list = []
+    match way_index:
+        case "010":
+            for i in range(len(num_list)):
+                hundred = int(num_list[i]) // 100
+                ten = (int(num_list[i]) // 10) % 10
+                one = int(num_list[i]) % 10
+                if hundred == 0 or hundred == 3 or hundred == 6 or hundred==9:
+                    if ten == 1 or ten == 4 or ten == 7:
+                        if one == 0 or one == 3 or one == 6 or one==9:
+                            # print(indexList[i])
+                            key_list.append(num_list[i])
+            pass
+        case "001":
+            for i in range(len(num_list)):
+                hundred = int(num_list[i]) // 100
+                ten = (int(num_list[i]) // 10) % 10
+                one = int(num_list[i]) % 10
+                if hundred == 0 or hundred == 3 or hundred == 6 or hundred == 9:
+                    if ten == 0 or ten == 3 or ten == 6 or ten == 9:
+                        if one == 1 or one == 4 or one == 7:
+                            # print(indexList[i])
+                            key_list.append(num_list[i])
+            pass
+        case "021":
+            for i in range(len(num_list)):
+                hundred = int(num_list[i]) // 100
+                ten = (int(num_list[i]) // 10) % 10
+                one = int(num_list[i]) % 10
+                if hundred == 0 or hundred == 3 or hundred == 6 or hundred == 9:
+                    if ten == 2 or ten == 5 or ten == 8:
+                        if one == 1 or one == 4 or one == 7:
+                            # print(indexList[i])
+                            key_list.append(num_list[i])
+            pass
+        case "112":
+            for i in range(len(num_list)):
+                hundred = int(num_list[i]) // 100
+                ten = (int(num_list[i]) // 10) % 10
+                one = int(num_list[i]) % 10
+                if hundred == 1 or hundred == 4 or hundred == 7:
+                    if ten == 1 or ten == 4 or ten == 7:
+                        if one == 2 or one == 5 or one == 8:
+                            # print(indexList[i])
+                            key_list.append(num_list[i])
+            pass
+        case "121":
+            for i in range(len(num_list)):
+                hundred = int(num_list[i]) // 100
+                ten = (int(num_list[i]) // 10) % 10
+                one = int(num_list[i]) % 10
+                if hundred == 1 or hundred == 4 or hundred == 7:
+                    if ten == 2 or ten == 5 or ten == 8:
+                        if one == 1 or one == 4 or one == 7:
+                            # print(indexList[i])
+                            key_list.append(num_list[i])
+            pass
+        case "201":
+            for i in range(len(num_list)):
+                hundred = int(num_list[i]) // 100
+                ten = (int(num_list[i]) // 10) % 10
+                one = int(num_list[i]) % 10
+                if hundred == 2 or hundred == 5 or hundred == 8:
+                    if ten == 0 or ten == 3 or ten == 6 or ten==9:
+                        if one == 1 or one == 4 or one == 7:
+                            # print(indexList[i])
+                            key_list.append(num_list[i])
+            pass
+        case "202":
+            for i in range(len(num_list)):
+                hundred = int(num_list[i]) // 100
+                ten = (int(num_list[i]) // 10) % 10
+                one = int(num_list[i]) % 10
+                if hundred == 2 or hundred == 5 or hundred == 8:
+                    if ten == 0 or ten == 3 or ten == 6 or ten == 9:
+                        if one == 2 or one == 5 or one == 8:
+                            # print(indexList[i])
+                            key_list.append(num_list[i])
+            pass
+        case "210":
+            for i in range(len(num_list)):
+                hundred = int(num_list[i]) // 100
+                ten = (int(num_list[i]) // 10) % 10
+                one = int(num_list[i]) % 10
+                if hundred == 2 or hundred == 5 or hundred == 8:
+                    if ten == 1 or ten == 4 or ten == 7:
+                        if one == 0 or one == 3 or one == 6 or one == 9:
+                            # print(indexList[i])
+                            key_list.append(num_list[i])
+            pass
+        case "221":
+            for i in range(len(num_list)):
+                hundred = int(num_list[i]) // 100
+                ten = (int(num_list[i]) // 10) % 10
+                one = int(num_list[i]) % 10
+                if hundred == 2 or hundred == 5 or hundred == 8:
+                    if ten == 2 or ten == 5 or ten == 8:
+                        if one == 1 or one == 4 or one == 7:
+                            # print(indexList[i])
+                            key_list.append(num_list[i])
+            pass
+    return key_list
+    pass
+
 def GetSubtraction(index_01,index_02):
     """
     #取相减和值(绝对值)
@@ -789,7 +920,13 @@ def GetResult_02(num_list,index,mIndex):
     # Show(result_Remove_Sum_Way)
 
     result_Remove_Sum_Befoe=GetResult_Sum_Way_Before(result_Remove_Sum_Way,sum)#和尾去前2组合
-    Show(result_Remove_Sum_Befoe)
+    #和尾去前2组合
+
+    result_Remove_Sum_After=GetResult_Sum_Way_After(result_Remove_Sum_Befoe,sum)#和尾去后2组合
+    # Show(result_Remove_Sum_After)
+
+    result_Remove_Way_Sum=GetResult_Sum_Way_Remove(result_Remove_Sum_After,sum)
+    Show(result_Remove_Way_Sum)
 
     print("上上一期:", mIndex)
     print("上一期:", index)
@@ -869,17 +1006,7 @@ def GetResult_Rem_Way(num_list,index):
     :param index:上一期号码
     :return:
     """
-    index_way=""
-    for i in range(len(index)):
-        if index[i] == 0 or index[i] == 3 or index[i] == 6 or index[i] == 9:
-            index_way += "0"
-            pass
-        if index[i] == 1 or index[i] == 4 or index[i] == 7:
-            index_way += "1"
-            pass
-        if index[i] == 2 or index[i] == 5 or index[i] == 8:
-            index_way += "2"
-        pass
+    index_way=Get_Way(index)
     # print("路数:",index_way)
     mReturnList=[]
     match index_way:
@@ -1108,6 +1235,106 @@ def GetResult_Sum_Way_Before(num_list,sum):
             mReturnList_Sum = Get_Remove_Sum_2bit_Before_combination(sum_list_before, 4, 6)
             pass
     return mReturnList_Sum
+    pass
+
+def GetResult_Sum_Way_After(num_list,sum):
+    """
+    #根据和值去除后两位组合
+    :param num_list:
+    :param sum:
+    :return:
+    """
+    mReturnList_Sum = []
+    match sum:
+        case 0:
+            #和尾为0,去掉?21,?63
+            sum_list_before=Get_Remove_Sum_2bit_After_combination(num_list,2,1)
+            mReturnList_Sum = Get_Remove_Sum_2bit_After_combination(sum_list_before, 6, 3)
+            pass
+        case 1:
+            sum_list_before = Get_Remove_Sum_2bit_After_combination(num_list, 1, 6)
+            mReturnList_Sum = Get_Remove_Sum_2bit_After_combination(sum_list_before, 7, 9)
+            pass
+        case 2:
+            sum_list_before = Get_Remove_Sum_2bit_After_combination(num_list, 2, 8)
+            mReturnList_Sum = Get_Remove_Sum_2bit_After_combination(sum_list_before, 5, 6)
+            pass
+        case 3:
+            sum_list_before = Get_Remove_Sum_2bit_After_combination(num_list, 0, 9)
+            mReturnList_Sum = Get_Remove_Sum_2bit_After_combination(sum_list_before, 4, 7)
+            pass
+        case 4:
+            sum_list_before = Get_Remove_Sum_2bit_After_combination(num_list, 5, 2)
+            mReturnList_Sum = Get_Remove_Sum_2bit_After_combination(sum_list_before, 9, 4)
+            pass
+        case 5:
+            sum_list_before = Get_Remove_Sum_2bit_After_combination(num_list, 3, 2)
+            mReturnList_Sum = Get_Remove_Sum_2bit_After_combination(sum_list_before, 7, 3)
+            pass
+        case 6:
+            sum_list_before = Get_Remove_Sum_2bit_After_combination(num_list, 3, 9)
+            mReturnList_Sum = Get_Remove_Sum_2bit_After_combination(sum_list_before, 7, 0)
+            pass
+        case 7:
+            sum_list_before = Get_Remove_Sum_2bit_After_combination(num_list, 4, 5)
+            mReturnList_Sum = Get_Remove_Sum_2bit_After_combination(sum_list_before, 8, 2)
+            pass
+        case 8:
+            sum_list_before = Get_Remove_Sum_2bit_After_combination(num_list, 2, 6)
+            mReturnList_Sum = Get_Remove_Sum_2bit_After_combination(sum_list_before, 5, 2)
+            pass
+        case 9:
+            sum_list_before = Get_Remove_Sum_2bit_After_combination(num_list, 4, 8)
+            mReturnList_Sum = Get_Remove_Sum_2bit_After_combination(sum_list_before, 7, 6)
+            pass
+    return mReturnList_Sum
+    pass
+
+def GetResult_Sum_Way_Remove(num_list,sum):
+    """
+    #根据和尾去012路特征
+    :param num_list:
+    :param sum:
+    :return:
+    """
+    result_Remove_combination=[]
+    match sum:
+        case 0:
+            """
+            #当和尾为0,下期去221类型
+            """
+            result_Remove_combination=Get_Way_Remove_combination(num_list,"221")
+            pass
+        case 1:
+            result_Remove_combination = Get_Way_Remove_combination(num_list, "201")
+            pass
+        case 2:
+            result_Remove_combination = Get_Way_Remove_combination(num_list, "210")
+            pass
+        case 3:
+            result_Remove_combination = Get_Way_Remove_combination(num_list, "001")
+            pass
+        case 4:
+            result_Remove_combination = Get_Way_Remove_combination(num_list, "221")
+            pass
+        case 5:
+            result_Remove_combination = Get_Way_Remove_combination(num_list, "202")
+            pass
+        case 6:
+            result_Remove_combination = Get_Way_Remove_combination(num_list, "121")
+            pass
+        case 7:
+            result_Remove_combination = Get_Way_Remove_combination(num_list, "021")
+            pass
+        case 8:
+            result_Remove_combination = Get_Way_Remove_combination(num_list, "112")
+            pass
+        case 9:
+            result_Remove_combination = Get_Way_Remove_combination(num_list, "010")
+            pass
+
+    result_re = [i for i in num_list if i not in result_Remove_combination]
+    return result_re
     pass
 
 def main():
