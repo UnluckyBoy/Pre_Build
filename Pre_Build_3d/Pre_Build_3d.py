@@ -1010,6 +1010,7 @@ def Get_Correct_Result_02(file_path,num_list):
         result_Rem_ten = Pre_Funcation_03_Rem_ten(sum, num_list)  # 去除十位
         result_Rem_one = Pre_Funcation_03_Rem_one(sum, num_list)  # 去除个位
 
+
         result_Remove_tenBit = Get_Remove_tenBit_combination(List_2_Str(num_list), last_index_list[1], index_list[1])  # 前两期去除组合
         test_list=result_Remove_tenBit
 

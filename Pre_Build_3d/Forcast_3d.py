@@ -9,23 +9,20 @@ import argparse
 import random
 import pandas as pd
 
-def Get_Read_File_Index(file_path):
-    # 通过读取文件调用检测正确率
-    file = pd.read_csv(file_path, header=None, encoding='utf-8')
-    index_len = len(file)
-    result_file_list = []
-    for i in range(index_len):
-        str = []
-        for j in range(3):
-            str.append(file[j][i])
-            pass
-        result_file_list.append(str)
-        if i == index_len - 1:  # 检测是否最后一个，是则跳过。
-            break
-            pass
+def Get_Read_file(path):
+    file=pd.read_csv(path, header=None, encoding='utf-8')
+    # print(file)
+    # file_num = file.iloc[0]
+    # file_num_str=Get_List_2_str(file_num.tolist())
+    # print(file_num_str)
+    result_list=[]
+    for i in range(len(file)):
+        file_num = file.iloc[i]
+        file_num_str = Get_List_2_str(file_num.tolist())
+        # print(file_num_str)
+        result_list.append(file_num_str)
         pass
-
-    return result_file_list
+    return result_list
     pass
 
 def DoForecast(file_path,column):
@@ -48,7 +45,7 @@ def DoForecast(file_path,column):
     return result
     pass
 
-def GetNext_Index(mIndex,mListIndex):
+def Get_Next_Index(mIndex,mListIndex):
     """预测下一次的值
     :param mIndex:数字下标
     :param mListIndex:数字列表
@@ -80,7 +77,22 @@ def GetMin(num_01,num_02,num_03):
     #return num_01 if num_01 > num_02 and num_01 > num_03 else num_02 if num_02 > num_03 else num_03#最大数
     pass
 
-def GetResult_Funcation_01(list_01,list_02,list_03):
+def Get_Remove_duplicate(list):
+    """
+    #去重list中重复项
+    :param list:
+    :return:
+    """
+    result_Remove_duplicate=[]
+    for x in list:
+        if x not in result_Remove_duplicate:
+            result_Remove_duplicate.append(x)
+        pass
+
+    return result_Remove_duplicate
+    pass
+
+def Get_Result_Funcation_01(list_01,list_02,list_03):
     """
     #将list_01,list_02,list_03中的单元素组合成一个list元素
     :param list_01:
@@ -91,22 +103,20 @@ def GetResult_Funcation_01(list_01,list_02,list_03):
     index = GetMin(len(list_01), len(list_02), len(list_03))
 
     result=[]
-    result_Remove_duplicate=[]
     for i in range(index):
         result.append(str(list_01[i])+ str(list_02[i]) + str(list_03[i]))
         pass
 
-    """
-    #去重list中重复项
-    """
-    for x in result:
-        if x not in result_Remove_duplicate:
-            result_Remove_duplicate.append(x)
-        pass
+    # """
+    # #去重list中重复项
+    # """
+    # result_Remove_duplicate = []
+    # for x in result:
+    #     if x not in result_Remove_duplicate:
+    #         result_Remove_duplicate.append(x)
+    #     pass
+    result_Remove_duplicate=Get_Remove_duplicate(result)#去重方法函数
 
-    #print("下一次可能出现的结果:\n" + str(result))
-    #print("下一次可能出现的结果(去重后):\n" + str(result_Remove_duplicate))
-    #print("总可能数:" + str(len(result))+"\n去重后总可能数:"+str(len(result_Remove_duplicate)))
     return result_Remove_duplicate
     pass
 
@@ -147,27 +157,69 @@ def Get_List_2_str(index_list):
     return str_list
     pass
 
+def Get_Remove_Way(index_list,file_path):
+    """
+    #通过跨度获取下一期预测
+    :param index_list:
+    :param file_path:
+    :return:
+    """
+    way_key=max(index_list)-min(index_list)
+    get_file_list=Get_Read_file(file_path)
+
+    result_way_list=[]
+    for i in range(len(get_file_list)):
+        if i==len(get_file_list)-1:
+            break
+            pass
+
+        # print("get_file_list:", get_file_list[i])
+        # print("test_0:",get_file_list[i][0])
+        # print("test_1:", get_file_list[i][1])
+        # print("test_2:", get_file_list[i][2])
+
+        remove_kry=int(get_file_list[i][-1])
+        if way_key==remove_kry:
+            #print("get_file_list:", get_file_list[i])
+            # print("test_0:", get_file_list[i+1][0])
+            # print("test_1:", get_file_list[i+1][1])
+            # print("test_2:", get_file_list[i+1][2])
+            test_0=get_file_list[i+1][0]
+            test_1=get_file_list[i+1][1]
+            test_2=get_file_list[i+1][2]
+            #print(test_0+test_1+test_2)
+            result_way_list.append(test_0+test_1+test_2)
+            pass
+        pass
+
+    result_Remove_duplicate = Get_Remove_duplicate(result_way_list)
+    return result_Remove_duplicate
+    pass
+
 def main(args):
-    indexList = [1,5,1]  # 上一期数字
-    """定义储存csv获取到三列数的数组"""
+    indexList = [0,7,2]  # 上一期数字
+    """定义储存csv获取到四列数的数组"""
     result_num_01 =DoForecast(args.file_path,0)
     result_num_02 =DoForecast(args.file_path,1)
     result_num_03 =DoForecast(args.file_path,2)
+    result_num_04 = DoForecast(args.file_path, 3)
     #print("获取结果:"+"\nresult_num_01:" + str(result_num_01)+"\nresult_num_02:"+str(result_num_02)+"\nresult_num_03:"+str(result_num_03))
 
     """
     ###此处为方法一使用数据###
     """
-    result_index_01=GetNext_Index(indexList[0],result_num_01)
-    result_index_02=GetNext_Index(indexList[1],result_num_02)
-    result_index_03=GetNext_Index(indexList[2],result_num_03)
-    #使用方法一预测
-    result_Funcation_01=GetResult_Funcation_01(result_index_01,result_index_02,result_index_03)
-    ###调用封装的显示方法显示结果###
-    Show_Result(indexList,result_Funcation_01)
+    result_index_01=Get_Next_Index(indexList[0],result_num_01)
+    result_index_02=Get_Next_Index(indexList[1],result_num_02)
+    result_index_03=Get_Next_Index(indexList[2],result_num_03)
 
-    ###使用方法二###
-    #GetResult_Funcation_02(args.file_path, 3)
+    #使用方法一预测
+    result_Funcation_01=Get_Result_Funcation_01(result_index_01,result_index_02,result_index_03)
+    result_Way=Get_Remove_Way(indexList,args.file_path)
+
+
+    ###调用封装的显示方法显示结果###
+    #Show_Result(indexList, result_Funcation_01)
+    Show_Result(indexList,result_Way)
 
     pass
 
