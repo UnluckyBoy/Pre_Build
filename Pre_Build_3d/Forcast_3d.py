@@ -9,6 +9,25 @@ import argparse
 import random
 import pandas as pd
 
+def Get_Read_File_Index(file_path):
+    # 通过读取文件调用检测正确率
+    file = pd.read_csv(file_path, header=None, encoding='utf-8')
+    index_len = len(file)
+    result_file_list = []
+    for i in range(index_len):
+        str = []
+        for j in range(3):
+            str.append(file[j][i])
+            pass
+        result_file_list.append(str)
+        if i == index_len - 1:  # 检测是否最后一个，是则跳过。
+            break
+            pass
+        pass
+
+    return result_file_list
+    pass
+
 def DoForecast(file_path,column):
     """获取csv文件内容并返回
     :param file_path: 文件地址,类型为str
@@ -16,13 +35,12 @@ def DoForecast(file_path,column):
     :return: 返回的list值,result为返回结果list
     """
     file = pd.read_csv(file_path, header=None, encoding='utf-8')
-    index = len(file)
-    #index=5266
+    index_len = len(file)
     num=file.iloc[:,column]
     result=[]
-    for i in range(index):
+    for i in range(index_len):
         result.append(num[i])
-        if i == index - 1:  #检测是否最后一个，是则跳过。
+        if i == index_len - 1:  #检测是否最后一个，是则跳过。
             break
             pass
         pass
@@ -115,7 +133,22 @@ def Show_Result(indexList,result_list):
     print("上一期:" + str(indexList))
     pass
 
+def Get_List_2_str(index_list):
+    """
+        #将list元素转为str
+        :param index_list:
+        :return:
+        """
+    str_list = ''
+    for i in range(len(index_list)):
+        # print(mList[i])
+        str_list += str(index_list[i])
+        pass
+    return str_list
+    pass
+
 def main(args):
+    indexList = [1,5,1]  # 上一期数字
     """定义储存csv获取到三列数的数组"""
     result_num_01 =DoForecast(args.file_path,0)
     result_num_02 =DoForecast(args.file_path,1)
@@ -125,7 +158,6 @@ def main(args):
     """
     ###此处为方法一使用数据###
     """
-    indexList=[1,4,1]#上一期数字
     result_index_01=GetNext_Index(indexList[0],result_num_01)
     result_index_02=GetNext_Index(indexList[1],result_num_02)
     result_index_03=GetNext_Index(indexList[2],result_num_03)
@@ -142,6 +174,6 @@ def main(args):
 if __name__=='__main__':
     #file_dir = r"./work.csv"
     parser = argparse.ArgumentParser()
-    parser.add_argument('--file_path', type=str,default='./data/work_3d.csv',help='csv文件地址')
+    parser.add_argument('--file_path', type=str,default='./data/3_min_3d_data.csv',help='csv文件地址')
     args = parser.parse_args()
     main(args)

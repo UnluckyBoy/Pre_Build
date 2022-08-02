@@ -771,6 +771,20 @@ def Show(mList):
     print("数量:",len(mList))
     pass
 
+def Get_List_2_Str(index_list):
+    """
+    #将list元素转为str
+    :param index_list:
+    :return:
+    """
+    str_list = ''
+    for i in range(len(index_list)):
+        # print(mList[i])
+        str_list += str(index_list[i])
+        pass
+    return str_list
+    pass
+
 def GetFuncation_Result(num_list,index):
 
     ##方法:***根据合值去下期百位、十位、个位
@@ -954,11 +968,131 @@ def GetResult_02(num_list,index,mIndex):
     print("上一期:", index)
     pass
 
-def Get_Correct_Result_02():
+def Get_Correct_Result_02(file_path,num_list):
     """
     #测试正确率方法
+    :param file_path:
+    :param num_list:
     :return:
     """
+    file = pd.read_csv(file_path, header=None, encoding='utf-8')
+    index_len = len(file)
+    result_file_list = []
+    for i in range(index_len):
+        str=[]
+        for j in range(3):
+            str.append(file[j][i])
+            pass
+        result_file_list.append(str)
+        if i == index_len - 1:  # 检测是否最后一个，是则跳过。
+            break
+            pass
+        pass
+    fun_01_correct=0
+    fun_02_correct = 0
+    fun_03_correct = 0
+    fun_04_correct = 0
+    fun_05_correct = 0
+    fun_06_correct = 0
+    fun_07_correct = 0
+    fun_08_correct = 0
+    fun_09_correct = 0
+    fun_10_correct = 0
+    fun_11_correct = 0
+    test_list=[]
+    for i in range(len(result_file_list)):
+        last_index_list=result_file_list[i]
+        index_list=result_file_list[i+1]
+        forecast_result_list=result_file_list[i+2]
+        sum = GetSum(index_list)
+
+        result_Rem_hundred = Pre_Funcation_03_Rem_hundred(sum, num_list)  # 去除百位
+        result_Rem_ten = Pre_Funcation_03_Rem_ten(sum, num_list)  # 去除十位
+        result_Rem_one = Pre_Funcation_03_Rem_one(sum, num_list)  # 去除个位
+
+        result_Remove_tenBit = Get_Remove_tenBit_combination(List_2_Str(num_list), last_index_list[1], index_list[1])  # 前两期去除组合
+        test_list=result_Remove_tenBit
+
+        result_Remove_Way = GetResult_Rem_Way(List_2_Str(num_list), index_list)  # 012路数去除组合
+        result_Remove_Sum_Way = GetResult_Sum_Way(List_2_Str(num_list), sum)  # 和尾去下一期两码组合
+        # Show(result_Remove_Sum_Way)
+
+        result_Remove_Sum_Befoe = GetResult_Sum_Way_Before(List_2_Str(num_list), sum)  # 和尾去前2组合
+        # Show(result_Remove_Sum_Befoe)
+        result_Remove_Sum_After = GetResult_Sum_Way_After(List_2_Str(num_list), sum)  # 和尾去后2组合
+        # Show(result_Remove_Sum_After)
+        result_Remove_Way_Sum = GetResult_Sum_Way_Remove(List_2_Str(num_list), sum)  # 和尾去012路
+
+        sum_temp_01 = sum + (3 * index_list[0] + index_list[1]) % 6
+        # print("上期和值+(3*百位+十位)%6:", sum_temp_01)
+        result_Sum_Hundred_ten_01 = GetResult_Sum_Hundred_ten(List_2_Str(num_list), sum_temp_01)
+        # Show(result_Sum_Hundred_ten_01)
+
+        sum_temp_02 = sum + (4 * index_list[0] + 9 * index_list[1]) % 6
+        # print("上期和值+(4*百位+9*十位)%6:", sum_temp_02)
+        result_Sum_Hundred_ten_02 = GetResult_Sum_Hundred_ten(List_2_Str(num_list), sum_temp_02)
+        # Show(result_Sum_Hundred_ten_02)
+
+        result_str_list = Get_List_2_Str(forecast_result_list)
+        print("预测值:", result_str_list)
+        # print("去除个,十,百位以及前两期去除组合:", result_Remove_tenBit)
+        # print("去除个,十,百位以及前两期去除组合,路数去除组合:", result_Remove_Way)
+        # print("去除个,十,百位以及前两期去除组合,路数去除组合,和尾去下一期两码组合:", result_Remove_Sum_Way)
+        if result_str_list in result_Remove_tenBit:
+            fun_01_correct+=1
+            pass
+        if result_str_list in result_Remove_Way:
+            fun_02_correct+=1
+            pass
+        if result_str_list in result_Remove_Sum_Way:
+            fun_03_correct+=1
+            pass
+        if result_str_list in result_Remove_Sum_Befoe:
+            fun_04_correct+=1
+            pass
+        if result_str_list in result_Remove_Sum_After:
+            fun_05_correct+=1
+            pass
+        if result_str_list in result_Remove_Way_Sum:
+            fun_06_correct+=1
+            pass
+        if result_str_list in result_Sum_Hundred_ten_01:
+            fun_07_correct+=1
+            pass
+        if result_str_list in result_Sum_Hundred_ten_02:
+            fun_08_correct+=1
+            pass
+        if result_str_list in List_2_Str(result_Rem_hundred):
+            fun_09_correct+=1
+            pass
+        if result_str_list in List_2_Str(result_Rem_ten):
+            fun_10_correct+=1
+            pass
+        if result_str_list in List_2_Str(result_Rem_one):
+            fun_11_correct+=1
+            pass
+
+        if i+2==len(result_file_list)-1:
+            break
+            pass
+        pass
+    print("去除百位后,正确率为:", fun_09_correct / len(result_file_list))
+    print("去除百,十位后,正确率为:", fun_10_correct / len(result_file_list))
+    print("去除百,十,个位后,正确率为:", fun_11_correct / len(result_file_list))
+    print("去除个,十,百位以及前两期去除组合后,正确率为:", fun_01_correct / len(result_file_list))
+    print("去除个,十,百位以及前两期去除组合,012路数去除组合后,正确率为:", fun_02_correct / len(result_file_list))
+    print("去除个,十,百位以及前两期去除组合,012路数去除组合,和尾去下一期两码组合后,正确率为:", fun_03_correct / len(result_file_list))
+    print("去除个,十,百位以及前两期去除组合,012路数去除组合,和尾去下一期两码组合,和尾去前2组合后,正确率为:", fun_04_correct / len(result_file_list))
+    print("去除个,十,百位以及前两期去除组合,012路数去除组合,和尾去下一期两码组合,和尾去前2组合,和尾去后2组合后,正确率为:",
+          fun_05_correct / len(result_file_list))
+    print("去除个,十,百位以及前两期去除组合,012路数去除组合,和尾去下一期两码组合,和尾去前2组合,和尾去后2组合,和尾去012后,正确率为:",
+          fun_06_correct / len(result_file_list))
+    print("去除个,十,百位以及前两期去除组合,012路数去除组合,和尾去下一期两码组合,和尾去前2组合,和尾去后2组合,和尾去012,上期和值+(3*百位+十位)%6后,正确率为:",
+          fun_07_correct / len(result_file_list))
+    print("去除个,十,百位以及前两期去除组合,012路数去除组合,和尾去下一期两码组合,和尾去前2组合,和尾去后2组合,和尾去012,上期和值+(3*百位+十位)%6,上期和值+(4*百位+9*十位)%6后,正确率为:",
+          fun_08_correct / len(result_file_list))
+
+    # print("测试_List_2_Str(num_list):",List_2_Str(num_list),"\ntest_list:",test_list)
 
     pass
 
@@ -1416,7 +1550,8 @@ def main():
 
     #GetResult_02(num_list, index,mIndex)#调用结果二方法函数
 
-    Get_Correct_Result_02()
+    path='./data/3_min_3d_data.csv'
+    Get_Correct_Result_02(path,num_list)
 
     pass
 
