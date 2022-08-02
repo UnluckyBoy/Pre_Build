@@ -7,6 +7,7 @@
 # ---************************************************---
 import math
 import random
+import pandas as pd
 
 
 def Pre_Build_num():
@@ -953,6 +954,13 @@ def GetResult_02(num_list,index,mIndex):
     print("上一期:", index)
     pass
 
+def Get_Correct_Result_02():
+    """
+    #测试正确率方法
+    :return:
+    """
+
+    pass
 
 def Get_Remove_tenBit_combination(indexList,x,y):
     """
@@ -1404,9 +1412,11 @@ def main():
     #上上期
     mIndex=[0,6,0]
 
-    #GetFuncation_Result(num_list,index)#调用结果方法函数
+    #GetFuncation_Result(num_list,index)#调用结果一方法函数
 
-    GetResult_02(num_list, index,mIndex)
+    #GetResult_02(num_list, index,mIndex)#调用结果二方法函数
+
+    Get_Correct_Result_02()
 
     pass
 
