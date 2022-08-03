@@ -76,6 +76,54 @@ def GetMin(num_01,num_02,num_03):
     #return num_01 if num_01 > num_02 and num_01 > num_03 else num_02 if num_02 > num_03 else num_03#最大数
     pass
 
+def Get_Odd_Even(index_num):
+    """
+    #判断index_num是否奇偶数并返回:奇-0，偶-1
+    :param index_num:
+    :return:
+    """
+    result_key=0
+    if index_num%2==0:
+        result_key=1
+        pass
+
+    return result_key
+    pass
+
+def Get_Max_Min(index_num):
+    """
+    #判断index_num的大小,大-1，小-0
+    :param index_num:
+    :return:
+    """
+    result_key=0
+    if index_num <5:
+        result_key=1
+        pass
+
+    return result_key
+    pass
+
+def Get_Way(index):
+    """
+    #将上一期号码转为012路
+    :param index:
+    :return:
+    """
+    index_way = ""
+    for i in range(len(index)):
+        if index[i] == 0 or index[i] == 3 or index[i] == 6 or index[i] == 9:
+            index_way += "0"
+            pass
+        if index[i] == 1 or index[i] == 4 or index[i] == 7:
+            index_way += "1"
+            pass
+        if index[i] == 2 or index[i] == 5 or index[i] == 8:
+            index_way += "2"
+        pass
+    return index_way
+    pass
+
 def Get_Remove_duplicate(list):
     """
     #去重list中重复项
@@ -119,20 +167,6 @@ def Get_Result_Funcation_01(list_01,list_02,list_03):
     return result_Remove_duplicate
     pass
 
-def GetResult_Funcation_02(path,column):
-    sum_list=DoForecast(path,column)
-    print(sum_list)
-    for i in range(len(sum_list)):
-        #num=sum_list[i]
-        if sum_list[i]%2==0:
-            print(str(sum_list[i])+":偶")
-            pass
-        else:
-            print(str(sum_list[i]) + ":奇")
-            pass
-        pass
-    pass
-
 def Show_Result(indexList,result_list):
     str_show = ''
     for i in range(len(result_list)):
@@ -140,8 +174,7 @@ def Show_Result(indexList,result_list):
         str_show += str(result_list[i]) + " "
         pass
     print(str_show)
-    print("数量:", len(result_list))
-    print("上一期:" + str(indexList))
+    print("预测结果数量:", len(result_list),"\t上一期:" + str(indexList))
     pass
 
 def Get_List_2_str(index_list):
@@ -215,8 +248,88 @@ def Get_Remove_Sum(index_list,num_list_01,num_list_02,num_list_03):
     return result_Remove_duplicate
     pass
 
+def Get_Remove_Odd_Even(index_list,num_list_01,num_list_02,num_list_03):
+    """
+    #奇偶性走势预测
+    :param index_list:
+    :param num_list_01:
+    :param num_list_02:
+    :param num_list_03:
+    :return:
+    """
+    # print("len(num_list_01):",len(num_list_01))
+    # print("len(num_list_02):", len(num_list_02))
+    # print("len(num_list_03):", len(num_list_03))
+    index_list_key_01=Get_Odd_Even(index_list[0])#上一期的第一个数据，判断奇偶性
+    index_list_key_02 = Get_Odd_Even(index_list[1])#上一期的第二个数据，判断奇偶性
+    index_list_key_03 = Get_Odd_Even(index_list[2])#上一期的第三个数据，判断奇偶性
+    result_odd_even_list = []
+    for i in range(len(num_list_01)):
+        if i==len(num_list_01)-1:
+            break
+            pass
+
+        result_list_key_01 = Get_Odd_Even(num_list_01[i])  # 历史第一个数据，判断奇偶性
+        result_list_key_02 = Get_Odd_Even(num_list_02[i])  # 历史第二个数据，判断奇偶性
+        result_list_key_03 = Get_Odd_Even(num_list_03[i])  # 历史第三个数据，判断奇偶性
+        if index_list_key_01 == result_list_key_01 and index_list_key_02 == result_list_key_02 \
+                and index_list_key_03 == result_list_key_03:
+            # print(str(num_list_01[i]) + str(num_list_02[i]) + str(num_list_03[i]))
+            # print(str(num_list_01[i+1])+str(num_list_02[i+1])+str(num_list_03[i+1]))
+            result_odd_even_list.append(str(num_list_01[i+1])+str(num_list_02[i+1])+str(num_list_03[i+1]))
+            pass
+        pass
+
+    result_Remove_duplicate = Get_Remove_duplicate(result_odd_even_list)
+    return result_Remove_duplicate
+    pass
+
+def Get_Remove_Max_Min(index_list,num_list_01,num_list_02,num_list_03):
+    index_list_key_01 = Get_Max_Min(index_list[0])  # 上一期的第一个数据，判断大小
+    index_list_key_02 = Get_Max_Min(index_list[1])  # 上一期的第二个数据，判断大小
+    index_list_key_03 = Get_Max_Min(index_list[2])  # 上一期的第三个数据，判断大小
+
+    result_max_min_list = []
+    for i in range(len(num_list_01)):
+        if i == len(num_list_01) - 1:
+            break
+            pass
+
+        result_list_key_01 = Get_Max_Min(num_list_01[i])  # 历史第一个数据，判断大小
+        result_list_key_02 = Get_Max_Min(num_list_02[i])  # 历史第二个数据，判断大小
+        result_list_key_03 = Get_Max_Min(num_list_03[i])  # 历史第三个数据，判断大小
+        if index_list_key_01 == result_list_key_01 and index_list_key_02 == result_list_key_02 \
+                and index_list_key_03 == result_list_key_03:
+            result_max_min_list.append(str(num_list_01[i + 1]) + str(num_list_02[i + 1]) + str(num_list_03[i + 1]))
+            pass
+        pass
+
+    result_Remove_duplicate = Get_Remove_duplicate(result_max_min_list)
+    return result_Remove_duplicate
+    pass
+
+def Get_Remove_Special_Way(index_list,num_list_01,num_list_02,num_list_03):
+    index_list_key=Get_Way(index_list)
+    result_max_min_list = []
+    for i in range(len(num_list_01)):
+        temp_list=[]
+        if i == len(num_list_01) - 1:
+            break
+            pass
+
+        # list((num_list_01[i],num_list_02[i],num_list_03[i])):将元组(x,y,z)转为列表[x,y,z]
+        result_list_key=Get_Way(list((num_list_01[i],num_list_02[i],num_list_03[i])))
+        if index_list_key == result_list_key:
+            result_max_min_list.append(str(num_list_01[i + 1]) + str(num_list_02[i + 1]) + str(num_list_03[i + 1]))
+            pass
+        pass
+
+    result_Remove_duplicate = Get_Remove_duplicate(result_max_min_list)
+    return result_Remove_duplicate
+    pass
+
 def main(args):
-    indexList = [3,6,1]  # 上一期数字
+    indexList = [1,0,6]  # 上一期数字
     """定义储存csv获取到三列数的数组"""
     result_num_01 =DoForecast(args.file_path,0)
     result_num_02 =DoForecast(args.file_path,1)
@@ -228,25 +341,38 @@ def main(args):
     result_index_01=Get_Next_Index(indexList[0],result_num_01)
     result_index_02=Get_Next_Index(indexList[1],result_num_02)
     result_index_03=Get_Next_Index(indexList[2],result_num_03)
-
-    #使用方法一:走势预测
+    #方法一:走势预测
     result_Funcation_01=Get_Result_Funcation_01(result_index_01,result_index_02,result_index_03)
     #方法二:跨度走势预测
     result_Way=Get_Remove_Way(indexList,args.file_path)
     #方法三:和值走势预测
     result_sum_way=Get_Remove_Sum(indexList,result_num_01,result_num_02,result_num_03)
-
+    #方法四:奇偶性走势预测
+    result_odd_even_way=Get_Remove_Odd_Even(indexList,result_num_01,result_num_02,result_num_03)
+    #方法五:大小走势预测
+    result_max_min_way = Get_Remove_Max_Min(indexList, result_num_01, result_num_02, result_num_03)
+    #方法六:012路预测
+    result_special_way = Get_Remove_Special_Way(indexList, result_num_01, result_num_02, result_num_03)
 
     ###调用封装的显示方法显示结果###
+    print("***方法一:走势预测***")
     Show_Result(indexList, result_Funcation_01)
+    print("***方法二:跨度走势预测***")
     Show_Result(indexList,result_Way)
+    print("***方法三:和值走势预测***")
     Show_Result(indexList,result_sum_way)
+    print("***方法四:奇偶性走势预测***")
+    Show_Result(indexList,result_odd_even_way)
+    print("***方法五:大小走势预测***")
+    Show_Result(indexList, result_max_min_way)
+    print("***方法六:012路预测***")
+    Show_Result(indexList, result_special_way)
 
     pass
 
 if __name__=='__main__':
     #file_dir = r"./work.csv"
     parser = argparse.ArgumentParser()
-    parser.add_argument('--file_path', type=str,default='./data/work_3d.csv',help='csv文件地址')
+    parser.add_argument('--file_path', type=str,default='./data/3_min_3d_data.csv',help='csv文件地址')
     args = parser.parse_args()
     main(args)
