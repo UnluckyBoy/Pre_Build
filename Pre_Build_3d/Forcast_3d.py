@@ -41,7 +41,6 @@ def DoForecast(file_path,column):
             break
             pass
         pass
-
     return result
     pass
 
@@ -135,11 +134,13 @@ def GetResult_Funcation_02(path,column):
     pass
 
 def Show_Result(indexList,result_list):
-    print("下一次可能出现的结果:")
+    str_show = ''
     for i in range(len(result_list)):
-        print(result_list[i])
+        # print(mList[i])
+        str_show += str(result_list[i]) + " "
         pass
-    print("总可能数量:" + str(len(result_list)))
+    print(str_show)
+    print("数量:", len(result_list))
     print("上一期:" + str(indexList))
     pass
 
@@ -172,14 +173,12 @@ def Get_Remove_Way(index_list,file_path):
         if i==len(get_file_list)-1:
             break
             pass
-
         # print("get_file_list:", get_file_list[i])
         # print("test_0:",get_file_list[i][0])
         # print("test_1:", get_file_list[i][1])
         # print("test_2:", get_file_list[i][2])
-
-        remove_kry=int(get_file_list[i][-1])
-        if way_key==remove_kry:
+        remove_key=int(get_file_list[i][-1])
+        if way_key==remove_key:
             #print("get_file_list:", get_file_list[i])
             # print("test_0:", get_file_list[i+1][0])
             # print("test_1:", get_file_list[i+1][1])
@@ -196,14 +195,32 @@ def Get_Remove_Way(index_list,file_path):
     return result_Remove_duplicate
     pass
 
+def Get_Remove_Sum(index_list,num_list_01,num_list_02,num_list_03):
+    sum_key=index_list[0]+index_list[1]+index_list[2]
+    # print("len(num_list_01):",len(num_list_01),"len(num_list_02):",len(num_list_02),"len(num_list_03):",len(num_list_03))
+    result_sum_list=[]
+    for i in range(len(num_list_01)):
+        if i==len(num_list_01)-1:
+            break
+            pass
+
+        remove_sum_key=num_list_01[i]+num_list_02[i]+num_list_03[i]
+        if sum_key==remove_sum_key:
+            result_sum_list.append(str(num_list_01[i+1])+ str(num_list_02[i+1]) + str(num_list_03[i+1]))
+            pass
+        pass
+
+    result_Remove_duplicate = Get_Remove_duplicate(result_sum_list)
+    # print("result_sum_list:",result_Remove_duplicate)
+    return result_Remove_duplicate
+    pass
+
 def main(args):
-    indexList = [0,7,2]  # 上一期数字
-    """定义储存csv获取到四列数的数组"""
+    indexList = [3,6,1]  # 上一期数字
+    """定义储存csv获取到三列数的数组"""
     result_num_01 =DoForecast(args.file_path,0)
     result_num_02 =DoForecast(args.file_path,1)
     result_num_03 =DoForecast(args.file_path,2)
-    result_num_04 = DoForecast(args.file_path, 3)
-    #print("获取结果:"+"\nresult_num_01:" + str(result_num_01)+"\nresult_num_02:"+str(result_num_02)+"\nresult_num_03:"+str(result_num_03))
 
     """
     ###此处为方法一使用数据###
@@ -212,20 +229,24 @@ def main(args):
     result_index_02=Get_Next_Index(indexList[1],result_num_02)
     result_index_03=Get_Next_Index(indexList[2],result_num_03)
 
-    #使用方法一预测
+    #使用方法一:走势预测
     result_Funcation_01=Get_Result_Funcation_01(result_index_01,result_index_02,result_index_03)
+    #方法二:跨度走势预测
     result_Way=Get_Remove_Way(indexList,args.file_path)
+    #方法三:和值走势预测
+    result_sum_way=Get_Remove_Sum(indexList,result_num_01,result_num_02,result_num_03)
 
 
     ###调用封装的显示方法显示结果###
-    #Show_Result(indexList, result_Funcation_01)
+    Show_Result(indexList, result_Funcation_01)
     Show_Result(indexList,result_Way)
+    Show_Result(indexList,result_sum_way)
 
     pass
 
 if __name__=='__main__':
     #file_dir = r"./work.csv"
     parser = argparse.ArgumentParser()
-    parser.add_argument('--file_path', type=str,default='./data/3_min_3d_data.csv',help='csv文件地址')
+    parser.add_argument('--file_path', type=str,default='./data/work_3d.csv',help='csv文件地址')
     args = parser.parse_args()
     main(args)
