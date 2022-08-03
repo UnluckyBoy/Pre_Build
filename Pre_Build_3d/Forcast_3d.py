@@ -6,8 +6,30 @@
 # @Software: PyCharm
 # ---************************************************---
 import argparse
-import random
+from collections import Counter
 import pandas as pd
+
+def Pre_Build_num():
+    """
+    #生成1000个数列
+    :return:
+    """
+    result=[]
+    for i in range(1000):
+        if i < 10:
+            i = '00' + str(i)
+            num=i
+        elif 10 <= i and i < 100:
+            i = '0' + str(i)
+            num = i
+        else:
+            i = str(i)
+            num = i
+            pass
+        result.append(num)
+        pass
+    return result
+    pass
 
 def Get_Read_file(path):
     file=pd.read_csv(path, header=None, encoding='utf-8')
@@ -23,6 +45,20 @@ def Get_Read_file(path):
         result_list.append(file_num_str)
         pass
     return result_list
+    pass
+
+def Get_Index_List_File(file_path):
+    str_contents=""
+    with open(file_path, 'r',encoding="utf-8") as f:
+        str_contents = f.read()
+        # print(str_contents.split()[-1])
+        pass
+    index_list = []
+    str_contents_end=(str_contents.split()[-1]).split(",")#将读取的字符串截取分片成list
+    for i in range(len(str_contents_end)):
+        index_list.append(int(str_contents_end[i]))#将截取分片后的元素转化成整数类型放入list
+        pass
+    return index_list
     pass
 
 def DoForecast(file_path,column):
@@ -65,6 +101,17 @@ def Get_Next_Index(mIndex,mListIndex):
     return result
     pass
 
+def Get_List_Difference_set(index_list,remove_list):
+    """
+    #获取两个list的差集
+    :param index_list:原list
+    :param remove_list:被删除list
+    :return:
+    """
+    result = [i for i in index_list if i not in remove_list]
+    return result
+    pass
+
 def GetMin(num_01,num_02,num_03):
     """三元运算获得最小数
     :param num_01:
@@ -102,6 +149,16 @@ def Get_Max_Min(index_num):
         pass
 
     return result_key
+    pass
+
+def Get_Sum_End(index):
+    """
+    #和值尾数取10的余数计算
+    :param index:
+    :return:
+    """
+    sum = (int(index[0]) + int(index[1]) + int(index[2]))% 10
+    return sum
     pass
 
 def Get_Way(index):
@@ -328,51 +385,450 @@ def Get_Remove_Special_Way(index_list,num_list_01,num_list_02,num_list_03):
     return result_Remove_duplicate
     pass
 
+def Get_Remove_By_Hundred(index_list,num_list):
+    hundred_key=index_list[0]
+    remove_list = []
+    for i in range(len(num_list)):
+        hundred = int(num_list[i]) // 100
+        ten = (int(num_list[i]) // 10) % 10
+        one = int(num_list[i]) % 10
+        if hundred_key == hundred or hundred_key == ten or hundred_key == one:
+            # print(num_list[i])
+            remove_list.append(num_list[i])
+            pass
+        pass
+
+    result = Get_List_Difference_set(num_list, remove_list)
+    return result
+    pass
+
+def Pre_Funcation_03_Rem_ten(sum_index,num_List):
+    """
+    #方法三:和尾*3，取尾去十位(去除同尾的数)
+    :param sum:
+    :param num_List:
+    :return:
+    """
+    list_spilt_str = Spilt_list(num_List)  ##调用拆分list公共方法
+    sum=(sum_index*3)%10
+    # print("***和尾*3去十位***__和值尾为:",sum)
+    result_f3_list = []
+    match sum:
+        case 0:
+            result_f3_list = Remove_ten_bit_cycle(list_spilt_str, 0)
+            pass
+        case 1:
+            result_f3_list = Remove_ten_bit_cycle(list_spilt_str, 1)
+            pass
+        case 2:
+            result_f3_list=Remove_ten_bit_cycle(list_spilt_str,2)
+            # print(result_f3_list)
+            pass
+        case 3:
+            result_f3_list = Remove_ten_bit_cycle(list_spilt_str, 3)
+            pass
+        case 4:
+            result_f3_list = Remove_ten_bit_cycle(list_spilt_str, 4)
+            pass
+        case 5:
+            result_f3_list = Remove_ten_bit_cycle(list_spilt_str, 5)
+            pass
+        case 6:
+            result_f3_list = Remove_ten_bit_cycle(list_spilt_str,6)
+            pass
+        case 7:
+            result_f3_list = Remove_ten_bit_cycle(list_spilt_str, 7)
+            pass
+        case 8:
+            result_f3_list = Remove_ten_bit_cycle(list_spilt_str, 8)
+            pass
+        case 9:
+            result_f3_list = Remove_ten_bit_cycle(list_spilt_str, 9)
+            pass
+    return result_f3_list
+    pass
+
+def Pre_Funcation_03_Rem_one(sum_index,num_List):
+    """
+    #方法三:和尾*3+3，取尾去个位
+    :param sum:
+    :param num_List:
+    :return:
+    """
+    list_2_str = Spilt_list(num_List)  ##调用拆分list公共方法
+    sum = (sum_index * 3+3) % 10
+    # print("***和尾*3+3去个位***__和值尾为:", sum)
+    result_f3 = []
+    match sum:
+        case 0:
+            result_f3 = Remove_one_bit_cycle(list_2_str, 0)
+            pass
+        case 1:
+            result_f3 = Remove_one_bit_cycle(list_2_str, 1)
+            pass
+        case 2:
+            result_f3 = Remove_one_bit_cycle(list_2_str, 2)
+            # print(result_f3_list)
+            pass
+        case 3:
+            result_f3 = Remove_one_bit_cycle(list_2_str, 3)
+            pass
+        case 4:
+            result_f3 = Remove_one_bit_cycle(list_2_str, 4)
+            pass
+        case 5:
+            result_f3 = Remove_one_bit_cycle(list_2_str, 5)
+            pass
+        case 6:
+            result_f3 = Remove_one_bit_cycle(list_2_str, 6)
+            pass
+        case 7:
+            result_f3 = Remove_one_bit_cycle(list_2_str, 7)
+            pass
+        case 8:
+            result_f3 = Remove_one_bit_cycle(list_2_str, 8)
+            pass
+        case 9:
+            result_f3 = Remove_one_bit_cycle(list_2_str, 9)
+            pass
+    return result_f3
+    pass
+
+def Pre_Funcation_03_Rem_hundred(sum_index,num_List):
+    """
+    #方法三:和尾加减2(偶数+2，奇数-2)
+    :param sum:
+    :param num_List:
+    :return:
+    """
+    result_List = Spilt_list(num_List)  ##调用拆分list公共方法
+    sumKey=sum_index%2
+    if sumKey==0:
+        sum = (sum_index+2) % 10
+        pass
+    else:
+        sum = GetSubtraction(sum_index, 2)
+        pass
+    # print("***和尾加减2(偶数+2，奇数-2)去百位***__和值尾为:", sum)
+    result = []
+    match sum:
+        case 0:
+            result = Remove_Bit_list(result_List, 0,100)
+            pass
+        case 1:
+            result = Remove_Bit_list(result_List, 100,200)
+            pass
+        case 2:
+            result = Remove_Bit_list(result_List, 200,300)
+            # print(result_f3_list)
+            pass
+        case 3:
+            result = Remove_Bit_list(result_List, 300,400)
+            pass
+        case 4:
+            result = Remove_Bit_list(result_List, 400,500)
+            pass
+        case 5:
+            result = Remove_Bit_list(result_List, 500,600)
+            pass
+        case 6:
+            result = Remove_Bit_list(result_List, 600,700)
+            pass
+        case 7:
+            result = Remove_Bit_list(result_List, 700,800)
+            pass
+        case 8:
+            result = Remove_Bit_list(result_List, 800,900)
+            pass
+        case 9:
+            result = Remove_Bit_list(result_List, 900,1000)
+            pass
+    return result
+    pass
+
+def Remove_ten_bit_cycle(index_list,index):
+    """
+    #循环杀十位数码
+    #取数长度公共公式:start=index*10+90*i;end=(index+1)*10+90*i
+    :param index_list:
+    :param index:去除的目标数
+    :return:
+    """
+    result_list=[]
+    for i in range(len(index_list)):
+        start=index*10+90*i
+        end=(index+1)*10+90*i
+        result_list = Remove_Bit_list(index_list, start, end)
+        pass
+    # result_list = Remove_Bit_list(index_list, start, end)
+    # print(result_list)
+    return result_list
+    pass
+
+def Remove_one_bit_cycle(index_list,index):
+    """
+    #循环杀个位数码
+    #取数长度公共公式:start=index+9*i;end=(index+1)+9*i
+    :param index_list:
+    :param index:去除的目标数
+    :return:
+    """
+    result_list = []
+    for i in range(len(index_list)):
+        start = index + 9*i
+        end = (index + 1)+ 9*i
+        result_list = Remove_Bit_list(index_list, start, end)
+        pass
+    return result_list
+    pass
+
+def Spilt_list(index_List):
+    """
+    #将生成的000-999的元素拆分为0,0,0-9,9,9存至result_str
+    :param index_List:
+    :return:
+    """
+    result_str = []
+    for i in range(len(index_List)):
+        """##将生成的000-999的元素拆分为0,0,0-9,9,9存至num_spilt_str"""
+        result_str.append(list(index_List[i]))
+        pass
+    return result_str
+    pass
+
+def Remove_Bit_list(spilt_str_list,start,end):
+    """
+    #和值为指定的数时去除百位数为指定数的元素
+    :param spilt_str_list:被去除list
+    :param start:开始元素
+    :param end:结束元素
+    :return:
+    """
+    reList = []
+    for mlist in spilt_str_list[start:end]:  # 从list列表的第start个元素开始遍历到end
+        reList.append(mlist)
+        pass
+    for m in range(len(reList)):
+        spilt_str_list.remove(reList[m])  ##去除元素
+        pass
+    #print(spilt_str_list, "长度:", len(spilt_str_list))
+    return spilt_str_list
+    pass
+
+def GetSubtraction(index_01,index_02):
+    """
+    #取相减和值(绝对值)
+    :param index_01:
+    :param index_02:
+    :return:
+    """
+    sum=(abs(index_01-index_02))%10
+    return sum
+    pass
+
+def Lists_2_List(requeList):
+    """
+    ##将requeList中的单个list元素转为str，存入result_str
+    :param requeList:
+    :return:
+    """
+    result_str=[]
+    for i in range(len(requeList)):
+        result_str.append(''.join(requeList[i]))##将requeList中的list元素转为str，存入result_str
+        pass
+
+    return result_str
+    pass
+
+def Get_Result_Correct(index_list,result_num_lists,next_list,file_csv_path,file_txt_path,result_path):
+    """
+    #判断预测的结果是否正确并保存
+    #保存next_list到txt文件
+    #保存index_list,以及跨度和和值到csv文件
+    :param index_list:
+    :param result_num_lists:
+    :param next_list:
+    :param file_csv_path:
+    :param file_txt_path:
+    :return:
+    """
+
+    test_next_list = []
+    test_next_str=Get_List_2_str(next_list)
+    test_next_list.append(test_next_str)
+
+    #将结果列表转为字符串以作保存
+    result_num_lists_save =""
+    for i in range(len(result_num_lists)):
+        # print(mList[i])
+        result_num_lists_save += str(result_num_lists[i])+" "
+        pass
+
+    result_key_save = ""
+    if len([v for v in test_next_list if v in result_num_lists])>0:
+        # print("正确")
+        result_key_save="正确"
+        pass
+    else:
+        # print("错误")
+        result_key_save = "错误"
+        pass
+
+    int_sum = next_list[0] + next_list[1] + next_list[2]  # 和值
+    int_span = max(next_list) - min(next_list)  # 跨度
+    index_result_save =Get_List_2_str(index_list)  #上期号码转字符串存入结果txt文件
+    next_result_save=Get_List_2_str(next_list)#预测号码转字符串存入结果txt文件
+    next_list_csv_save = str(next_list[0]) + "," + str(next_list[1]) + "," + str(next_list[2])#预测号码转字符串存入csv
+    key_csv_save = next_list_csv_save + "," + str(int_span) + "," + str(int_sum)  # 保存的csv最终字符串
+    result_txt_save="预测可能结果:"+result_num_lists_save+"\n可能结果总数量:"+str(len(result_num_lists))+"\t上期号:"+index_result_save+"\t真实号码:"+next_result_save+"\t结果:"+result_key_save
+    print(result_txt_save)
+
+    #写入csv文件末尾
+    with open(file_csv_path, 'a+',encoding="utf-8") as csv_write:
+        csv_write.write(key_csv_save+"\n")
+        pass
+
+    #写入txt文件末尾
+    with open(file_txt_path, 'a+',encoding="utf-8") as txt_write:
+        txt_write.write(next_list_csv_save+"\n")
+        pass
+
+    # 写入结果txt文件
+    with open(result_path, 'a+',encoding="utf-8") as result_write:
+        result_write.write(result_txt_save + "\n")
+        pass
+
+    print("***保存数据成功***")
+    pass
+
+def Get_Correct_Show(result_path):
+    """
+    #计算平均数量、正确率等
+    :param result_path:
+    :return:
+    """
+    str_contents=""
+    with open(result_path, 'r',encoding="utf-8") as f:
+        str_contents = f.read()
+        #str_contents_list.append(f.readline())
+        pass
+    # print(str_contents)
+    # print(str_contents.split()[-4])
+    correct_key="正确"
+    mistake_key="错误"
+    int_correct_key=str_contents.count(correct_key,0,len(str_contents))#正确的个数
+    int_mistake_key=str_contents.count(mistake_key,0,len(str_contents))#错误的个数
+    int_all_key=int_correct_key+int_mistake_key#总个数
+    #int_line_key=sum(1 for _ in open(result_path, 'r',encoding="utf-8"))#获取行号
+    print("总数:"+str(int_all_key)+"\t正确:"+str(int_correct_key)+
+          "\t错误:"+str(int_mistake_key)+"\t正确率:"+str(int_correct_key/int_all_key))
+
+    str_split_list=str_contents.split("\n")
+    str_split_list=str_split_list[0:-1]
+    # print("str_split_list:",str_split_list)
+    int_line_key = sum(1 for _ in open(result_path, 'r', encoding="utf-8"))  # 获取行号
+    # print(str_split_list[1])
+    str_list=[]
+    for i in range(len(str_split_list)):
+        int_sub_num=2*i-1
+        # print("i=",i,"2*i-1=",2*i-1,"len(str_split_list)=",len(str_split_list))
+        # print(str_split_list[int_sub_num])
+        str_list.append(str_split_list[int_sub_num])
+
+        if i==len(str_split_list)/2:
+            break
+            pass
+        pass
+    # print("str_list:",str_list[0])
+    # print("str_list_int:",str_list[0].split(":")[1].split("\t")[0])
+    int_result_num =0
+    for j in range(len(str_list)):
+        int_result_num+=int(str_list[j].split(":")[1].split("\t")[0])
+        pass
+
+    print("总可能出现次数:",int_result_num/int_all_key)
+    pass
+
 def main(args):
-    indexList = [1,0,6]  # 上一期数字
+    #随机生成1000个数据
+    pre_build_index_list=Pre_Build_num()
+
+    #index_list = [1,7,0]  #上一期数字
+    index_list=Get_Index_List_File(args.file_txt_path)#通过读取数据获得上一期数字
+    next_list=[1,5,1]#目标预测号码
+
     """定义储存csv获取到三列数的数组"""
-    result_num_01 =DoForecast(args.file_path,0)
-    result_num_02 =DoForecast(args.file_path,1)
-    result_num_03 =DoForecast(args.file_path,2)
+    result_num_01 =DoForecast(args.file_csv_path,0)
+    result_num_02 =DoForecast(args.file_csv_path,1)
+    result_num_03 =DoForecast(args.file_csv_path,2)
 
     """
     ###此处为方法一使用数据###
     """
-    result_index_01=Get_Next_Index(indexList[0],result_num_01)
-    result_index_02=Get_Next_Index(indexList[1],result_num_02)
-    result_index_03=Get_Next_Index(indexList[2],result_num_03)
+    result_index_01=Get_Next_Index(index_list[0],result_num_01)
+    result_index_02=Get_Next_Index(index_list[1],result_num_02)
+    result_index_03=Get_Next_Index(index_list[2],result_num_03)
     #方法一:走势预测
     result_Funcation_01=Get_Result_Funcation_01(result_index_01,result_index_02,result_index_03)
     #方法二:跨度走势预测
-    result_Way=Get_Remove_Way(indexList,args.file_path)
+    result_Way=Get_Remove_Way(index_list,args.file_csv_path)
     #方法三:和值走势预测
-    result_sum_way=Get_Remove_Sum(indexList,result_num_01,result_num_02,result_num_03)
+    result_sum_way=Get_Remove_Sum(index_list,result_num_01,result_num_02,result_num_03)
     #方法四:奇偶性走势预测
-    result_odd_even_way=Get_Remove_Odd_Even(indexList,result_num_01,result_num_02,result_num_03)
+    result_odd_even_way=Get_Remove_Odd_Even(index_list,result_num_01,result_num_02,result_num_03)
     #方法五:大小走势预测
-    result_max_min_way = Get_Remove_Max_Min(indexList, result_num_01, result_num_02, result_num_03)
+    result_max_min_way = Get_Remove_Max_Min(index_list, result_num_01, result_num_02, result_num_03)
     #方法六:012路预测
-    result_special_way = Get_Remove_Special_Way(indexList, result_num_01, result_num_02, result_num_03)
+    result_special_way = Get_Remove_Special_Way(index_list, result_num_01, result_num_02, result_num_03)
+    #方法七:通过百位去除特定数字预测
+    result_hundred_way=Get_Remove_By_Hundred(index_list,pre_build_index_list)
+    # 方法八:去除百、十、个位预测
+    sum = Get_Sum_End(index_list)
+    result_list_hundred = Pre_Funcation_03_Rem_hundred(sum, pre_build_index_list)  # 去除百位
+    result_Rem_ten = Pre_Funcation_03_Rem_ten(sum, result_list_hundred)  # 去除十位
+    result_one = Pre_Funcation_03_Rem_one(sum, result_Rem_ten)  # 去除个位
+    result_list_2_str = Lists_2_List(result_one)
 
     ###调用封装的显示方法显示结果###
-    print("***方法一:走势预测***")
-    Show_Result(indexList, result_Funcation_01)
-    print("***方法二:跨度走势预测***")
-    Show_Result(indexList,result_Way)
-    print("***方法三:和值走势预测***")
-    Show_Result(indexList,result_sum_way)
-    print("***方法四:奇偶性走势预测***")
-    Show_Result(indexList,result_odd_even_way)
-    print("***方法五:大小走势预测***")
-    Show_Result(indexList, result_max_min_way)
-    print("***方法六:012路预测***")
-    Show_Result(indexList, result_special_way)
+    # print("***方法一:走势预测***")
+    # Show_Result(index_list, result_Funcation_01)
+    # print("***方法二:跨度走势预测***")
+    # Show_Result(index_list,result_Way)
+    # # print("***方法三:和值走势预测***")
+    # # Show_Result(index_list,result_sum_way)
+    # # print("***方法四:奇偶性走势预测***")
+    # # Show_Result(index_list,result_odd_even_way)
+    # # print("***方法五:大小走势预测***")
+    # # Show_Result(index_list, result_max_min_way)
+    # print("***方法六:012路预测***")
+    # Show_Result(index_list, result_special_way)
+    # print("***方法七:通过百位去除特定数字预测***")
+    # Show_Result(index_list, result_hundred_way)
+    # print("***方法八:通过去除百、十、个位预测***")
+    # Show_Result(index_list, result_list_2_str)
+
+    #所有结果2个交集:
+    result_01=[i for i in result_Funcation_01 if i in result_Way]
+    result_02 = [i for i in result_Way if i in result_special_way]
+    result_03 = [i for i in result_special_way if i in result_hundred_way]
+    result_04 = [i for i in result_hundred_way if i in result_list_2_str]
+    result_05 = [i for i in result_list_2_str if i in result_Funcation_01]
+    result_str=result_01+result_02+result_03+result_04+result_05
+    result_duplicate=Get_Remove_duplicate(result_str)
+    # print("所有结果2个交集:")
+    # Show_Result(index_list, result_duplicate)
+
+    #Get_Result_Correct(index_list,result_duplicate,next_list,args.file_csv_path,args.file_txt_path,args.file_result_path)
+
+    Get_Correct_Show(args.file_result_path)
 
     pass
 
 if __name__=='__main__':
     #file_dir = r"./work.csv"
     parser = argparse.ArgumentParser()
-    parser.add_argument('--file_path', type=str,default='./data/3_min_3d_data.csv',help='csv文件地址')
+    parser.add_argument('--file_csv_path', type=str,default='./data/3_min_3d_data.csv',help='csv文件地址')
+    parser.add_argument('--file_txt_path', type=str, default='./data/3_min_3d_data.txt', help='txt文件地址')
+    parser.add_argument('--file_result_path', type=str, default='./data/result.txt', help='结果txt文件地址')
     args = parser.parse_args()
     main(args)
