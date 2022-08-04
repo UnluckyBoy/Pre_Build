@@ -66,7 +66,106 @@ def Get_Index_List_File(file_path):
     return index_list
     pass
 
-def Get_Next_List_File(file_path):
+def Get_Index_List_File_manual(file_path):
+    """
+    #读取txt文件获取上一期号码,手动添加值给3_min_3d_data.txt文件时调用
+    :param file_path:
+    :return:
+    """
+    str_contents=""
+    with open(file_path, 'r',encoding="utf-8") as f:
+        str_contents = f.read()
+        # print(str_contents.split()[-1])
+        pass
+    index_list = []
+    str_contents_end=(str_contents.split()[-2]).split(",")#将读取的字符串截取分片成list
+    for i in range(len(str_contents_end)):
+        index_list.append(int(str_contents_end[i]))#将截取分片后的元素转化成整数类型放入list
+        pass
+    return index_list
+    pass
+
+def Get_Next_List_File_manual(file_path):
+    """
+    #读取txt文件获取上一期号码,手动添加值给3_min_3d_data.txt文件时调用
+    :param file_path:
+    :return:
+    """
+    str_contents=""
+    with open(file_path, 'r',encoding="utf-8") as f:
+        str_contents = f.read()
+        # print(str_contents.split()[-1])
+        pass
+    index_list = []
+    str_contents_end=(str_contents.split()[-1]).split(",")#将读取的字符串截取分片成list
+    for i in range(len(str_contents_end)):
+        index_list.append(int(str_contents_end[i]))#将截取分片后的元素转化成整数类型放入list
+        pass
+    return index_list
+    pass
+
+def Get_Result_Correct_manual(index_list,result_num_lists,next_list,file_csv_path,file_txt_path,result_path):
+    """
+    #判断预测的结果是否正确并保存,手动添加值给3_min_3d_data.txt文件时调用,不用自动保存next_list
+    #保存next_list到txt文件
+    #保存index_list,以及跨度和和值到csv文件
+    :param index_list:
+    :param result_num_lists:
+    :param next_list:
+    :param file_csv_path:
+    :param file_txt_path:
+    :return:
+    """
+
+    test_next_list = []
+    test_next_str=Get_List_2_str(next_list)
+    test_next_list.append(test_next_str)
+
+    #将结果列表转为字符串以作保存
+    result_num_lists_save =""
+    for i in range(len(result_num_lists)):
+        # print(mList[i])
+        result_num_lists_save += str(result_num_lists[i])+" "
+        pass
+
+    result_key_save = ""
+    if len([v for v in test_next_list if v in result_num_lists])>0:
+        # print("正确")
+        result_key_save="正确"
+        pass
+    else:
+        # print("错误")
+        result_key_save = "错误"
+        pass
+
+    int_sum = next_list[0] + next_list[1] + next_list[2]  # 和值
+    int_span = max(next_list) - min(next_list)  # 跨度
+    index_result_save =Get_List_2_str(index_list)  #上期号码转字符串存入结果txt文件
+    next_result_save=Get_List_2_str(next_list)#预测号码转字符串存入结果txt文件
+    next_list_csv_save = str(next_list[0]) + "," + str(next_list[1]) + "," + str(next_list[2])#预测号码转字符串存入txt
+    key_csv_save = next_list_csv_save + "," + str(int_span) + "," + str(int_sum)  # 保存的csv最终字符串
+    result_txt_save="预测可能结果:"+result_num_lists_save+"\n可能结果总数量:"+str(len(result_num_lists))+"\t上期号:"+index_result_save+"\t真实号码:"+next_result_save+"\t结果:"+result_key_save
+    print(result_txt_save)
+
+    #写入csv文件末尾
+    with open(file_csv_path, 'a+',encoding="utf-8") as csv_write:
+        csv_write.write(key_csv_save+"\n")
+        pass
+
+    # #写入txt文件末尾
+    # with open(file_txt_path, 'a+',encoding="utf-8") as txt_write:
+    #     txt_write.write(next_list_csv_save+"\n")
+    #     pass
+
+    # 写入结果txt文件
+    with open(result_path, 'a+',encoding="utf-8") as result_write:
+        result_write.write(result_txt_save + "\n")
+        pass
+
+    print("***保存数据成功***")
+    pass
+
+def Get_Next_Lists_File(file_path):
     next_list = []
     file_str = ""
     with open(args.file_next_result_path, 'r', encoding='utf-8') as f:
@@ -430,7 +529,7 @@ def Get_Remove_By_Hundred(index_list,num_list):
 def Pre_Funcation_03_Rem_ten(sum_index,num_List):
     """
     #方法三:和尾*3，取尾去十位(去除同尾的数)
-    :param sum:
+    :param sum_index:
     :param num_List:
     :return:
     """
@@ -476,7 +575,7 @@ def Pre_Funcation_03_Rem_ten(sum_index,num_List):
 def Pre_Funcation_03_Rem_one(sum_index,num_List):
     """
     #方法三:和尾*3+3，取尾去个位
-    :param sum:
+    :param sum_index:
     :param num_List:
     :return:
     """
@@ -522,7 +621,7 @@ def Pre_Funcation_03_Rem_one(sum_index,num_List):
 def Pre_Funcation_03_Rem_hundred(sum_index,num_List):
     """
     #方法三:和尾加减2(偶数+2，奇数-2)
-    :param sum:
+    :param sum_index:
     :param num_List:
     :return:
     """
@@ -703,7 +802,7 @@ def Get_Result_Correct(index_list,result_num_lists,next_list,file_csv_path,file_
     int_span = max(next_list) - min(next_list)  # 跨度
     index_result_save =Get_List_2_str(index_list)  #上期号码转字符串存入结果txt文件
     next_result_save=Get_List_2_str(next_list)#预测号码转字符串存入结果txt文件
-    next_list_csv_save = str(next_list[0]) + "," + str(next_list[1]) + "," + str(next_list[2])#预测号码转字符串存入csv
+    next_list_csv_save = str(next_list[0]) + "," + str(next_list[1]) + "," + str(next_list[2])#预测号码转字符串存入txt
     key_csv_save = next_list_csv_save + "," + str(int_span) + "," + str(int_sum)  # 保存的csv最终字符串
     result_txt_save="预测可能结果:"+result_num_lists_save+"\n可能结果总数量:"+str(len(result_num_lists))+"\t上期号:"+index_result_save+"\t真实号码:"+next_result_save+"\t结果:"+result_key_save
     print(result_txt_save)
@@ -773,9 +872,10 @@ def Get_Correct_Show(result_path):
     print("平均总可能出现次数:",int_result_num/int_all_key)
     pass
 
-def Run_Result():
+def Run_Result_Show():
     """
     #运行最终方法函数
+    #预测并显示
     :return:
     """
     # 随机生成1000个数据
@@ -783,7 +883,6 @@ def Run_Result():
 
     # index_list = [1,7,0]  #上一期数字
     index_list = Get_Index_List_File(args.file_txt_path)  # 通过读取数据获得上一期数字
-    next_list = [1, 5, 1]  # 目标预测号码
 
     """定义储存csv获取到三列数的数组"""
     result_num_01 = DoForecast(args.file_csv_path, 0)
@@ -843,26 +942,24 @@ def Run_Result():
     result_05 = [i for i in result_list_2_str if i in result_Funcation_01]
     result_str = result_01 + result_02 + result_03 + result_04 + result_05
     result_duplicate = Get_Remove_duplicate(result_str)
-    # print("所有结果2个交集:")
-    # Show_Result(index_list, result_duplicate)
-
-    # Get_Result_Correct(index_list,result_duplicate,next_list,args.file_csv_path,args.file_txt_path,args.file_result_path)
+    print("所有结果2个交集:")
+    Show_Result(index_list, result_duplicate)
 
     Get_Correct_Show(args.file_result_path)
     pass
 
-def Run_Get_Resulr_test():
+def Run_Get_Result_save():
     """
-        #运行最终方法函数
-        :return:
-        """
+    #运行最终方法函数
+    :return:
+    """
     # 随机生成1000个数据
     pre_build_index_list = Pre_Build_num()
 
     # index_list = [1,7,0]  #上一期数字
     index_list = Get_Index_List_File(args.file_txt_path)  # 通过读取数据获得上一期数字
     #next_list = [1, 5, 1]  # 目标预测号码
-    next_lists=Get_Next_List_File(args.file_next_result_path)# 通过读取数据获得下一期数字
+    next_lists=Get_Next_Lists_File(args.file_next_result_path)# 通过读取数据获得下一期数字
     # print("获取的next_lists_next_lists[0]:",next_lists[0])
     for i in range(len(next_lists)):
         """定义储存csv获取到三列数的数组"""
@@ -909,14 +1006,100 @@ def Run_Get_Resulr_test():
         # Show_Result(index_list, result_duplicate)
         Get_Result_Correct(index_list,result_duplicate,next_lists[i],args.file_csv_path,args.file_txt_path,args.file_result_path)
         pass
+    Get_Correct_Show(args.file_result_path)
+    pass
+
+def Run_Forecast_manual_save():
+    """
+    #运行最终方法函数
+    :return:
+    """
+    # 随机生成1000个数据
+    pre_build_index_list = Pre_Build_num()
+
+    # index_list = [1,7,0]  #上一期数字
+    index_list = Get_Index_List_File_manual(args.file_txt_path)  # 通过读取数据获得上一期数字
+    # next_list = [1, 5, 1]  # 目标预测号码
+    next_lists = Get_Next_List_File_manual(args.file_txt_path)  # 通过读取数据获得下一期数字
+    # print("获取的next_lists_next_lists[0]:",next_lists[0])
+
+    """定义储存csv获取到三列数的数组"""
+    result_num_01 = DoForecast(args.file_csv_path, 0)
+    result_num_02 = DoForecast(args.file_csv_path, 1)
+    result_num_03 = DoForecast(args.file_csv_path, 2)
+
+    """
+    ###此处为方法一使用数据###
+    """
+    result_index_01 = Get_Next_Index(index_list[0], result_num_01)
+    result_index_02 = Get_Next_Index(index_list[1], result_num_02)
+    result_index_03 = Get_Next_Index(index_list[2], result_num_03)
+    # 方法一:走势预测
+    result_Funcation_01 = Get_Result_Funcation_01(result_index_01, result_index_02, result_index_03)
+    # 方法二:跨度走势预测
+    result_Way = Get_Remove_Way(index_list, args.file_csv_path)
+    # 方法三:和值走势预测
+    result_sum_way = Get_Remove_Sum(index_list, result_num_01, result_num_02, result_num_03)
+    # 方法四:奇偶性走势预测
+    result_odd_even_way = Get_Remove_Odd_Even(index_list, result_num_01, result_num_02, result_num_03)
+    # 方法五:大小走势预测
+    result_max_min_way = Get_Remove_Max_Min(index_list, result_num_01, result_num_02, result_num_03)
+    # 方法六:012路预测
+    result_special_way = Get_Remove_Special_Way(index_list, result_num_01, result_num_02, result_num_03)
+    # 方法七:通过百位去除特定数字预测
+    result_hundred_way = Get_Remove_By_Hundred(index_list, pre_build_index_list)
+    # 方法八:去除百、十、个位预测
+    sum_num = Get_Sum_End(index_list)
+    result_list_hundred = Pre_Funcation_03_Rem_hundred(sum_num, pre_build_index_list)  # 去除百位
+    result_Rem_ten = Pre_Funcation_03_Rem_ten(sum_num, result_list_hundred)  # 去除十位
+    result_one = Pre_Funcation_03_Rem_one(sum_num, result_Rem_ten)  # 去除个位
+    result_list_2_str = Lists_2_List(result_one)
+
+    # ###调用封装的显示方法显示结果###
+    # print("***方法一:走势预测***")
+    # Show_Result(index_list, result_Funcation_01)
+    # print("***方法二:跨度走势预测***")
+    # Show_Result(index_list,result_Way)
+    # # print("***方法三:和值走势预测***")
+    # # Show_Result(index_list,result_sum_way)
+    # # print("***方法四:奇偶性走势预测***")
+    # # Show_Result(index_list,result_odd_even_way)
+    # # print("***方法五:大小走势预测***")
+    # # Show_Result(index_list, result_max_min_way)
+    # print("***方法六:012路预测***")
+    # Show_Result(index_list, result_special_way)
+    # print("***方法七:通过百位去除特定数字预测***")
+    # Show_Result(index_list, result_hundred_way)
+    # print("***方法八:通过去除百、十、个位预测***")
+    # Show_Result(index_list, result_list_2_str)
+
+    # 所有结果2个交集:
+    result_01 = [i for i in result_Funcation_01 if i in result_Way]
+    result_02 = [i for i in result_Way if i in result_special_way]
+    result_03 = [i for i in result_special_way if i in result_hundred_way]
+    result_04 = [i for i in result_hundred_way if i in result_list_2_str]
+    result_05 = [i for i in result_list_2_str if i in result_Funcation_01]
+    result_str = result_01 + result_02 + result_03 + result_04 + result_05
+    result_duplicate = Get_Remove_duplicate(result_str)
+    # print("所有结果2个交集:")
+    # Show_Result(index_list, result_duplicate)
+    Get_Result_Correct_manual(index_list, result_duplicate, next_lists, args.file_csv_path, args.file_txt_path,
+                       args.file_result_path)
+
+    #Get_Correct_Show(args.file_result_path)
     pass
 
 def main(args):
-    #Run_Result()
+    ###
+    # 如下两个方法为:已出结果并验证正确率的自动和手动方法
+    # 其中Run_Forecast_manual_save()方法用于保存数据到3_min_3d_data.csv和result.txt文件中使用
+    ###
+    #Run_Get_Result_save()#读取next.txt文件获取预测值
+    Run_Forecast_manual_save()#读取3_min_3d_data.txt文件获取预测值(最后一个),上一期值(倒数第二个),即手动添加值给3_min_3d_data.txt文件时调用
 
-    #Run_Get_Resulr_test()
+    #Run_Result_Show()#预测并显示(未出结果时，预测),最终以此函数预测
 
-    Get_Correct_Show(args.file_result_path)
+    # Get_Correct_Show(args.file_result_path)
     pass
 
 if __name__=='__main__':

@@ -1,4 +1,9 @@
-next.txt:检测下一期目标号数文件(每次使用前检查此文件是否已使用，已使用则清除并重新添加)
-result.txt:检测结果文件
-3_min_3d_data.txt:获取上一期号数文件
-3_min_3d_data.csv:历史数据走势预测文件
+自动方案:
+    a)next.txt:检测下一期目标号数文件(每次使用前检查此文件是否已使用，已使用则清除并重新添加)
+    b)result.txt:检测结果文件
+    c)3_min_3d_data.txt:获取上一期号数文件
+    d)3_min_3d_data.csv:历史数据走势预测文件
+    e)调用Run_Get_Result_save()方法
+手动方案:
+    a)3_min_3d_data.txt:再此文件添加下一期真实值
+    b)调用Run_Forecast_manual()方法
