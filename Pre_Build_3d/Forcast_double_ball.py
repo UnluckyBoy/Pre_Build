@@ -75,19 +75,14 @@ def Get_ball_Result(list_01,list_02,list_03,list_04,list_05,list_06,list_07):
     index = GetMin(len(list_01), len(list_02), len(list_03),len(list_04), len(list_05), len(list_06),len(list_07))
 
     result=[]
+
     for i in range(index):
+        str_temp=str(list_01[i])+","+ str(list_02[i]) +","+ str(list_03[i])+","+str(list_04[i])\
+                 +","+str(list_05[i]) +","+str(list_06[i])+","+str(list_07[i])
         result.append("["+str(list_01[i])+","+ str(list_02[i]) +","+ str(list_03[i])+","+str(list_04[i])+","+ str(list_05[i]) +
                       ","+str(list_06[i])+","+str(list_07[i])+"]")
         pass
 
-    # """
-    # #去重list中重复项
-    # """
-    # result_Remove_duplicate = []
-    # for x in result:
-    #     if x not in result_Remove_duplicate:
-    #         result_Remove_duplicate.append(x)
-    #     pass
     result_Remove_duplicate=Get_Remove_duplicate(result)#去重方法函数
 
     return result_Remove_duplicate
@@ -125,7 +120,7 @@ def Show_Result(indexList,result_list):
     pass
 
 def main(args):
-    indexList = [5,6,9,13,23,25,8]  # 上一期
+    indexList = [8,18,20,22,24,28,10]  # 上一期
     """定义储存csv获取到三列数的数组"""
     result_num_01 = DoForecast(args.file_path, 0)
     result_num_02 = DoForecast(args.file_path, 1)
@@ -138,21 +133,24 @@ def main(args):
     """
         ###此处为方法一使用数据###
         """
-    result_index_01 = Get_Next_Index(indexList[0], result_num_01)
-    result_index_02 = Get_Next_Index(indexList[1], result_num_02)
-    result_index_03 = Get_Next_Index(indexList[2], result_num_03)
-    result_index_04 = Get_Next_Index(indexList[3], result_num_04)
-    result_index_05 = Get_Next_Index(indexList[4], result_num_05)
-    result_index_06 = Get_Next_Index(indexList[5], result_num_06)
-    result_index_07 = Get_Next_Index(indexList[6], result_num_07)
+    # result_index_01 = Get_Next_Index(indexList[0], result_num_01)
+    # result_index_02 = Get_Next_Index(indexList[1], result_num_02)
+    # result_index_03 = Get_Next_Index(indexList[2], result_num_03)
+    # result_index_04 = Get_Next_Index(indexList[3], result_num_04)
+    # result_index_05 = Get_Next_Index(indexList[4], result_num_05)
+    # result_index_06 = Get_Next_Index(indexList[5], result_num_06)
+    # result_index_07 = Get_Next_Index(indexList[6], result_num_07)
 
-    # print("len(result_index_01):",len(result_index_01))
-    # print("len(result_index_02):", len(result_index_02))
-    # print("len(result_index_03):", len(result_index_03))
-    # print("len(result_index_04):", len(result_index_04))
-    # print("len(result_index_05):", len(result_index_05))
-    # print("len(result_index_06):", len(result_index_06))
-    # print("len(result_index_07):", len(result_index_07))
+    result_index_01 = Get_Remove_duplicate(Get_Next_Index(indexList[0], result_num_01))
+    result_index_02 = Get_Remove_duplicate(Get_Next_Index(indexList[1], result_num_02))
+    result_index_03 = Get_Remove_duplicate(Get_Next_Index(indexList[2], result_num_03))
+    result_index_04 = Get_Remove_duplicate(Get_Next_Index(indexList[3], result_num_04))
+    result_index_05 = Get_Remove_duplicate(Get_Next_Index(indexList[4], result_num_05))
+    result_index_06 = Get_Remove_duplicate(Get_Next_Index(indexList[5], result_num_06))
+    result_index_07 = Get_Remove_duplicate(Get_Next_Index(indexList[6], result_num_07))
+
+    # print("len_:",len(result_index_01),len(result_index_02),len(result_index_03),len(result_index_04),len(result_index_05),
+    #       len(result_index_06),len(result_index_07))
 
     # 使用方法一:走势预测
     result_01 = Get_ball_Result(result_index_01, result_index_02, result_index_03,result_index_04,
