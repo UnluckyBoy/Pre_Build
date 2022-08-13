@@ -143,7 +143,22 @@ def GetResult_Funcation_01(args,index_list):
 
     result_Remove_duplicate = Get_Remove_duplicate(result)#去重
 
-    ###调用封装的显示方法显示结果###
+    # print(result_Remove_duplicate[0][0]+result_Remove_duplicate[0][1]+result_Remove_duplicate[0][2])
+    result_Remove_duplicate_exclude=[]
+    for j in range(len(result_Remove_duplicate)):
+        # print(result_Remove_duplicate[j])#类型为str
+        if result_Remove_duplicate[j][0]=='4' or result_Remove_duplicate[j][0]=='3' or \
+                result_Remove_duplicate[j][1]=='4'  or result_Remove_duplicate[j][1]=='3' or \
+                result_Remove_duplicate[j][2]=='4'  or result_Remove_duplicate[j][2]=='3':
+            # print(result_Remove_duplicate[j])
+            result_Remove_duplicate_exclude.append(result_Remove_duplicate[j])
+            pass
+        pass
+    # print(result_Remove_duplicate_exclude)
+    #去除不含有特殊数字的结果
+    Show_Result_Save(index_list, result_Remove_duplicate_exclude, args.result_exclude_path)
+
+    ###调用封装的显示方法显示结果并保存###
     Show_Result_Save(index_list, result_Remove_duplicate,args.result_path)
     pass
 
@@ -172,7 +187,7 @@ def Show_Result_Save(index_list,result_list,save_path):
     # print("数量:", len(result_list))
     # print("上一期:" + str(index_list))
     count_str="\n数量:"+str(len(result_list))
-    index_list_str="\t上一期:" + str(index_list)
+    index_list_str="\n上一期:" + str(index_list)
     result_save_str=str_show+count_str+index_list_str
 
     with open(save_path,'w+',encoding='utf-8') as write_file:
@@ -198,12 +213,14 @@ def Save_CSV_File(file_path,index_list):
     print("保存完毕！"+format(file_path))
     pass
 
+
 def main(args):
+    ##预测专用
     index_list=Get_Index_By_Index_File(args.index_path)
     print("上一期:",index_list)
-    # Get_Next_By_Next_File(args.next_path)
     GetResult_Funcation_01(args,index_list)#预测下一期结果,在data/work_3d_result.txt处查看
     Save_CSV_File(args.csv_path,index_list)#保存(即更新csv结果池)
+
     pass
 
 if __name__=='__main__':
@@ -212,5 +229,7 @@ if __name__=='__main__':
     parser.add_argument('--next_path', type=str, default='./data/work_3d_GetNext.txt', help='work_3d_GetNext.txt文件地址')
     parser.add_argument('--index_path', type=str, default='./data/work_3d_Index.txt', help='work_3d_Index.txt文件地址')
     parser.add_argument('--result_path', type=str, default='./data/work_3d_result.txt', help='结果work_3d_result.txt文件保存地址')
+    parser.add_argument('--result_exclude_path', type=str, default='./data/work_3d_result_exclude.txt',help='结果work_3d_result_exclude.txt文件保存地址')
+    parser.add_argument('--test_path', type=str, default='./data/test_index.txt', help='测试文件地址')
     args = parser.parse_args()
     main(args)

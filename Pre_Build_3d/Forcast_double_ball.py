@@ -120,34 +120,53 @@ def Show_Result(indexList,result_list):
     pass
 
 def main(args):
-    indexList = [8,18,20,22,24,28,10]  # 上一期
+    # ############################################双色球模块################################################
+    # index_list = [7,10,16,20,21,27,11]  # 上一期(双色球)
+    # """定义储存csv获取到三列数的数组"""
+    # result_num_01 = DoForecast(args.double_ball_path, 0)
+    # result_num_02 = DoForecast(args.double_ball_path, 1)
+    # result_num_03 = DoForecast(args.double_ball_path, 2)
+    # result_num_04 = DoForecast(args.double_ball_path, 3)
+    # result_num_05 = DoForecast(args.double_ball_path, 4)
+    # result_num_06 = DoForecast(args.double_ball_path, 5)
+    # result_num_07 = DoForecast(args.double_ball_path, 6)
+    # #
+    # ###此处为方法一使用数据###
+    # result_index_01 = Get_Next_Index(index_list[0], result_num_01)#不去重
+    # result_index_02 = Get_Next_Index(index_list[1], result_num_02)
+    # result_index_03 = Get_Next_Index(index_list[2], result_num_03)
+    # result_index_04 = Get_Next_Index(index_list[3], result_num_04)
+    # result_index_05 = Get_Next_Index(index_list[4], result_num_05)
+    # result_index_06 = Get_Next_Index(index_list[5], result_num_06)
+    # result_index_07 = Get_Next_Index(index_list[6], result_num_07)
+    # #
+    # # result_index_01 = Get_Remove_duplicate(Get_Next_Index(index_list[0], result_num_01))#先去重
+    # # result_index_02 = Get_Remove_duplicate(Get_Next_Index(index_list[1], result_num_02))
+    # # result_index_03 = Get_Remove_duplicate(Get_Next_Index(index_list[2], result_num_03))
+    # # result_index_04 = Get_Remove_duplicate(Get_Next_Index(index_list[3], result_num_04))
+    # # result_index_05 = Get_Remove_duplicate(Get_Next_Index(index_list[4], result_num_05))
+    # # result_index_06 = Get_Remove_duplicate(Get_Next_Index(index_list[5], result_num_06))
+    # # result_index_07 = Get_Remove_duplicate(Get_Next_Index(index_list[6], result_num_07))
+    ###################################################################################################
+
+    ############################大乐透模块#################################
+    index_list = [1,4,12,23,29,5,12]  # 上一期(大乐透)
     """定义储存csv获取到三列数的数组"""
-    result_num_01 = DoForecast(args.file_path, 0)
-    result_num_02 = DoForecast(args.file_path, 1)
-    result_num_03 = DoForecast(args.file_path, 2)
-    result_num_04 = DoForecast(args.file_path, 3)
-    result_num_05 = DoForecast(args.file_path, 4)
-    result_num_06 = DoForecast(args.file_path, 5)
-    result_num_07 = DoForecast(args.file_path, 6)
-
-    """
-        ###此处为方法一使用数据###
-        """
-    # result_index_01 = Get_Next_Index(indexList[0], result_num_01)
-    # result_index_02 = Get_Next_Index(indexList[1], result_num_02)
-    # result_index_03 = Get_Next_Index(indexList[2], result_num_03)
-    # result_index_04 = Get_Next_Index(indexList[3], result_num_04)
-    # result_index_05 = Get_Next_Index(indexList[4], result_num_05)
-    # result_index_06 = Get_Next_Index(indexList[5], result_num_06)
-    # result_index_07 = Get_Next_Index(indexList[6], result_num_07)
-
-    result_index_01 = Get_Remove_duplicate(Get_Next_Index(indexList[0], result_num_01))
-    result_index_02 = Get_Remove_duplicate(Get_Next_Index(indexList[1], result_num_02))
-    result_index_03 = Get_Remove_duplicate(Get_Next_Index(indexList[2], result_num_03))
-    result_index_04 = Get_Remove_duplicate(Get_Next_Index(indexList[3], result_num_04))
-    result_index_05 = Get_Remove_duplicate(Get_Next_Index(indexList[4], result_num_05))
-    result_index_06 = Get_Remove_duplicate(Get_Next_Index(indexList[5], result_num_06))
-    result_index_07 = Get_Remove_duplicate(Get_Next_Index(indexList[6], result_num_07))
+    result_num_01 = DoForecast(args.happy_number_path, 0)
+    result_num_02 = DoForecast(args.happy_number_path, 1)
+    result_num_03 = DoForecast(args.happy_number_path, 2)
+    result_num_04 = DoForecast(args.happy_number_path, 3)
+    result_num_05 = DoForecast(args.happy_number_path, 4)
+    result_num_06 = DoForecast(args.happy_number_path, 5)
+    result_num_07 = DoForecast(args.happy_number_path, 6)
+    result_index_01 = Get_Next_Index(index_list[0], result_num_01)
+    result_index_02 = Get_Next_Index(index_list[1], result_num_02)
+    result_index_03 = Get_Next_Index(index_list[2], result_num_03)
+    result_index_04 = Get_Next_Index(index_list[3], result_num_04)
+    result_index_05 = Get_Next_Index(index_list[4], result_num_05)
+    result_index_06 = Get_Next_Index(index_list[5], result_num_06)
+    result_index_07 = Get_Next_Index(index_list[6], result_num_07)
+    #####################################################################
 
     # print("len_:",len(result_index_01),len(result_index_02),len(result_index_03),len(result_index_04),len(result_index_05),
     #       len(result_index_06),len(result_index_07))
@@ -156,11 +175,11 @@ def main(args):
     result_01 = Get_ball_Result(result_index_01, result_index_02, result_index_03,result_index_04,
                                           result_index_05, result_index_06,result_index_07)
 
-    Show_Result(indexList,result_01)
+    Show_Result(index_list,result_01)
 
 if __name__=='__main__':
-    #file_dir = r"./work.csv"
     parser = argparse.ArgumentParser()
-    parser.add_argument('--file_path', type=str,default='./data/double_ball.csv',help='csv文件地址')
+    parser.add_argument('--double_ball_path', type=str,default='./data/double_ball.csv',help='双色球csv文件地址')
+    parser.add_argument('--happy_number_path', type=str, default='./data/work_happy_number.csv', help='双色球csv文件地址')
     args = parser.parse_args()
     main(args)
