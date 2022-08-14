@@ -335,14 +335,6 @@ def Get_Result_Funcation_01(list_01,list_02,list_03):
         result.append(str(list_01[i])+ str(list_02[i]) + str(list_03[i]))
         pass
 
-    # """
-    # #去重list中重复项
-    # """
-    # result_Remove_duplicate = []
-    # for x in result:
-    #     if x not in result_Remove_duplicate:
-    #         result_Remove_duplicate.append(x)
-    #     pass
     result_Remove_duplicate=Get_Remove_duplicate(result)#去重方法函数
 
     return result_Remove_duplicate
