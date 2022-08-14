@@ -8,7 +8,8 @@
 import argparse
 import random
 import pandas as pd
-from Pre_Remove_Hundred_Ten_One_Bit import BySum_Remove_Hundred_Bit, BySum_Remove_Ten_Bit, BySum_Remove_One_Bit
+from Pre_Remove_Hundred_Ten_One_Bit import BySum_Remove_Hundred_Bit, BySum_Remove_Ten_Bit, BySum_Remove_One_Bit, \
+    Remove_Hundred_Ten_One
 
 
 #################################################读取文件取数模块##########################################################
@@ -67,6 +68,27 @@ def Get_Base_File(file_path):
 #################################################读取文件取数模块##########################################################
 
 #################################################数据操作方法模块##########################################################
+def Pre_Build_num():
+    """
+    #生成1000个数列
+    :return:
+    """
+    result=[]
+    for i in range(1000):
+        if i < 10:
+            i = '00' + str(i)
+            num=i
+        elif 10 <= i and i < 100:
+            i = '0' + str(i)
+            num = i
+        else:
+            i = str(i)
+            num = i
+            pass
+        result.append(num)
+        pass
+    return result
+    pass
 def Get_Index_Sum(index_list):
     """
     #求list元素和
@@ -169,7 +191,7 @@ def Get_Result_Exclude(num_list,exclude):
 #################################################数据操作方法模块##########################################################
 
 #################################################保存数据方法模块##########################################################
-def Show_Result_Save(index_list,result_list,save_path):
+def Show_Result_Save(str_title,index_list,result_list,save_path):
     """
     #保存结果文件
     :param index_list:
@@ -186,7 +208,7 @@ def Show_Result_Save(index_list,result_list,save_path):
     # print("上一期:" + str(index_list))
     count_str="\n数量:"+str(len(result_list))
     index_list_str="\n上一期:" + str(index_list)
-    result_save_str=str_show+count_str+index_list_str
+    result_save_str=str_title+"\n"+str_show+count_str+index_list_str
 
     with open(save_path,'w+',encoding='utf-8') as write_file:
         write_file.write(result_save_str)
@@ -211,8 +233,27 @@ def Save_CSV_File(file_path,index_list):
     pass
 #################################################保存数据方法模块##########################################################
 
+#################################################显示数据方法模块##########################################################
+def Show_Result(index_list,result_list):
+    """
+    #保存结果文件
+    :param index_list:
+    :param result_list:
+    :param save_path:
+    :return:
+    """
+    str_show = ''
+    for i in range(len(result_list)):
+        str_show += str(result_list[i]) + " "
+        pass
+    print(str_show)
+    print("数量:", len(result_list))
+    print("上一期:" + str(index_list))
+    pass
+#################################################显示数据方法模块##########################################################
+
 #################################################调用预测方法模块##########################################################
-def Get_Result_Funcation_01(args,index_list):
+def Get_Result_Funcation_01(args,index_list,exclude):
     """定义储存csv获取到三列数的数组"""
     result_num_01 = DoForecast_CSV_File(args.csv_path, 0)
     result_num_02 = DoForecast_CSV_File(args.csv_path, 1)
@@ -233,43 +274,73 @@ def Get_Result_Funcation_01(args,index_list):
 
     result_remove_duplicate = Get_Remove_duplicate(result)#去重
 
-    result_remove_duplicate_exclude=Get_Result_Exclude(result_remove_duplicate,4)#调用定胆函数计算，4为胆
+    result_remove_duplicate_exclude=Get_Result_Exclude(result_remove_duplicate,exclude)#调用定胆函数计算，4为胆
 
-    ###################去除不含有特殊数字的结果(即定胆)并保存#####################
-    Show_Result_Save(index_list, result_remove_duplicate_exclude, args.result_exclude_path)
+    ###################筛选特殊数字的结果(即定胆)并保存#####################
+    str_funcation_01_exclude="*******************历史池走势定胆方法*******************"
+    Show_Result_Save(str_funcation_01_exclude,index_list, result_remove_duplicate_exclude, args.result_exclude_path)
 
     #######################调用封装的显示方法显示结果并保存######################
-    Show_Result_Save(index_list, result_remove_duplicate,args.result_path)
+    str_funcation_01 = "*******************历史池走势不定胆方法*******************"
+    Show_Result_Save(str_funcation_01,index_list, result_remove_duplicate,args.result_path)
     pass
-def Get_Result_Funcation_02(num_list_re_one):
+def Get_Result_Funcation_02(args,index_list,exclude):
     """
-    #大底定胆
+    #大底定胆,去除个十百位
+    #和尾加减2(偶数+2，奇数-2)去百位
+    #和尾*3，取尾去十位
+    #和尾*3+3，取尾去个位
     :param num_list_re_one:
     :return:
     """
-    result_exclude=Get_Result_Exclude(num_list_re_one,4)
-    print('结果:\n',result_exclude,'\n数量:',len(result_exclude))
-    pass
-#################################################调用预测方法模块##########################################################
+    num_list = Get_Base_File(args.base_path)#获取大底
+    sum_end = Get_Index_Sum_End(index_list)#获取和尾
 
-def main(args):
-    # ##预测结果
-    index_list=Get_Index_By_Index_File(args.index_path)
-    print("上一期:",index_list)
-
-    num_list = Get_Base_File(args.base_path)
-    sum_end = Get_Index_Sum_End(index_list)
-    # BySum_Remove_Hundred_Bit(num_list, sum_end)
     num_list_re_hundred = BySum_Remove_Hundred_Bit(num_list, sum_end)  # 去除百位
     # print('num_list_re_hundred:\n', num_list_re_hundred)
     num_list_re_ten = BySum_Remove_Ten_Bit(num_list_re_hundred, sum_end)  # 去除十位
     # print('num_list_re_ten:\n', num_list_re_ten)
     num_list_re_one = BySum_Remove_One_Bit(num_list_re_ten, sum_end)  # 去除个位
     # print('num_list_re_one:\n', num_list_re_one, '\n数量:', len(num_list_re_one))
-    Get_Result_Funcation_02(num_list_re_one)
 
-    # Get_Result_Funcation_01(args,index_list)#预测下一期结果,在data/work_3d_result.txt处查看
-    # Save_CSV_File(args.csv_path,index_list)#保存(即更新csv结果池)
+    result_list_exclude=Get_Result_Exclude(num_list_re_one,exclude)
+    # print("********************大底定胆方法********************")
+    # Show_Result(index_list,result_list_exclude)
+    str_funcation_02_exclude = "***大底去个(和尾*3+3，取尾去个位)十(和尾*3，取尾去十位)百(和尾加减2(偶数+2，奇数-2)去百位)位定胆方法***"
+    Show_Result_Save(str_funcation_02_exclude,index_list,result_list_exclude,args.base_result_exclude_path)
+    pass
+def Get_Result_Funcation_03(args,index_list,hundred,ten,one,exclude):
+    # print("********************大底定胆方法********************")
+    num_list = Get_Base_File(args.base_path)  # 获取大底
+    num_list_remove=Remove_Hundred_Ten_One(num_list,hundred,ten,one)
+    result_list_exclude=Get_Result_Exclude(num_list_remove,exclude)
+    Show_Result(index_list, result_list_exclude)
+
+    result_list_exclude_remevo=Remove_Hundred_Ten_One(result_list_exclude,1,5,6)#重新调用一次筛选个十百位数
+    # Show_Result(index_list, result_list_exclude_remevo)
+    str_funcation_03_exclude = "*******************大底直接去个十百位定胆方法*******************"
+    Show_Result_Save(str_funcation_03_exclude,index_list, result_list_exclude_remevo,args.base_result_exclude_remove)
+    pass
+#################################################调用预测方法模块##########################################################
+
+#################################################测试正确率模块###########################################################
+
+#################################################测试正确率模块###########################################################
+
+def main(args):
+    # ##预测结果
+    index_list=Get_Index_By_Index_File(args.index_path)
+    # print("上一期:",index_list)
+    exclude_key=7#定胆数
+    hundred_key=4#百位筛选键值
+    ten_key=1#十位筛选键值
+    one_key=4#个位筛选键值
+
+    Get_Result_Funcation_02(args,index_list,exclude_key)#调用大底定胆方法
+    Get_Result_Funcation_03(args, index_list, hundred_key, ten_key, one_key, exclude_key)
+
+    Get_Result_Funcation_01(args,index_list,exclude_key)#预测下一期结果,在data/work_3d_result.txt处查看
+    #Save_CSV_File(args.csv_path,index_list)#保存(即更新csv结果池),该方法只运行一次
 
     pass
 
@@ -279,7 +350,12 @@ if __name__=='__main__':
     parser.add_argument('--next_path', type=str, default='./data/work_3d_GetNext.txt', help='work_3d_GetNext.txt文件地址')
     parser.add_argument('--index_path', type=str, default='./data/work_3d_Index.txt', help='work_3d_Index.txt文件地址')
     parser.add_argument('--result_path', type=str, default='./data/work_3d_result.txt', help='结果work_3d_result.txt文件保存地址')
-    parser.add_argument('--result_exclude_path', type=str, default='./data/work_3d_result_exclude.txt',help='结果work_3d_result_exclude.txt文件保存地址')
-    parser.add_argument('--base_path', type=str, default='./data/test_index.txt', help='测试文件地址')
+    parser.add_argument('--result_exclude_path', type=str, default='./data/work_3d_result_exclude.txt',
+                        help='定胆结果work_3d_result_exclude.txt文件保存地址')
+    parser.add_argument('--base_result_exclude_path', type=str, default='./data/work_3d_base_result_exclude.txt',
+                        help='大底定胆结果work_3d_base_result_exclude.txt文件地址')
+    parser.add_argument('--base_result_exclude_remove', type=str, default='./data/work_3d_base_result_exclude_remove.txt',
+                        help='大底定胆结果work_3d_base_result_exclude_remove.txt文件地址')
+    parser.add_argument('--base_path', type=str, default='./data/base_Index.txt', help='测试文件地址')
     args = parser.parse_args()
     main(args)

@@ -5,6 +5,8 @@
 # @File : Pre_Remove_Hundred_Ten_One_Bit.py
 # @Software: PyCharm
 # ---************************************************---
+
+####################################################和值尾数去个十百方法模块#################################################
 def BySum_Remove_Hundred_Bit(num_list,sum_end):
     """
     #通过和尾去百位
@@ -36,7 +38,6 @@ def BySum_Remove_Hundred_Bit(num_list,sum_end):
 
     return result_re_hundred
     pass
-
 def BySum_Remove_Ten_Bit(num_list,sum_end):
     """
     #通过和尾去十位
@@ -60,7 +61,6 @@ def BySum_Remove_Ten_Bit(num_list,sum_end):
         pass
     return result_re_ten
     pass
-
 def BySum_Remove_One_Bit(num_list,sum_end):
     """
     #通过和尾去个位
@@ -84,7 +84,9 @@ def BySum_Remove_One_Bit(num_list,sum_end):
         pass
     return result_re_one
     pass
+####################################################和值尾数去个十百方法模块#################################################
 
+#####################################################公共类方法模块########################################################
 def Get_Odd_Even(index_num):
     """
     #判断index_num是否奇偶数并返回:奇-0，偶-1
@@ -97,3 +99,24 @@ def Get_Odd_Even(index_num):
         pass
     return result_key
     pass
+#####################################################公共类方法模块########################################################
+
+###################################################直接去个十百方法模块#####################################################
+def Remove_Hundred_Ten_One(num_list,hundred,ten,one):
+    hundred_key=str(hundred)
+    ten_key=str(ten)
+    one_key=str(one)
+    result_re_hundred = []
+    for i in range(len(num_list)):
+        if i == len(num_list) - 1:
+            break
+            pass
+        if num_list[i][0] != hundred_key and num_list[i][1] !=ten_key and num_list[i][2] !=one_key:
+            # print(num_list[i])
+            result_re_hundred.append(num_list[i])
+            pass
+        pass
+
+    return result_re_hundred
+    pass
+###################################################直接去个十百方法模块#####################################################
