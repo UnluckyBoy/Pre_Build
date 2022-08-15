@@ -9,7 +9,7 @@ import argparse
 import random
 import pandas as pd
 from Pre_Remove_Hundred_Ten_One_Bit import BySum_Remove_Hundred_Bit, BySum_Remove_Ten_Bit, BySum_Remove_One_Bit, \
-    Remove_Hundred_Ten_One
+    Remove_Hundred_Ten_One, Remove_Span, Remove_Sum, Remove_Special_Num, Remove_Broken
 
 
 #################################################读取文件取数模块##########################################################
@@ -313,34 +313,56 @@ def Get_Result_Funcation_03(args,index_list,hundred,ten,one,exclude):
     # print("********************大底定胆方法********************")
     num_list = Get_Base_File(args.base_path)  # 获取大底
     num_list_remove=Remove_Hundred_Ten_One(num_list,hundred,ten,one)
-    result_list_exclude=Get_Result_Exclude(num_list_remove,exclude)
-    Show_Result(index_list, result_list_exclude)
+    result_list_exclude_01=Get_Result_Exclude(num_list_remove,exclude)
+    # Show_Result(index_list, result_list_exclude_01)
+    # result_list_exclude_02 = Get_Result_Exclude(result_list_exclude_01, 5)#二次定胆
+    # Show_Result(index_list, result_list_exclude_02)
 
-    result_list_exclude_remevo=Remove_Hundred_Ten_One(result_list_exclude,1,5,6)#重新调用一次筛选个十百位数
+    result_list_exclude_remevo=Remove_Hundred_Ten_One(result_list_exclude_01,7,6,5)#第二次筛选个十百位数
     # Show_Result(index_list, result_list_exclude_remevo)
     str_funcation_03_exclude = "*******************大底直接去个十百位定胆方法*******************"
     Show_Result_Save(str_funcation_03_exclude,index_list, result_list_exclude_remevo,args.base_result_exclude_remove)
+
+    ##########################三次连续通过跨度筛选##################################
+    result_remove_span_01=Remove_Span(result_list_exclude_remevo,0)
+    result_remove_span_02= Remove_Span(result_remove_span_01, 1)
+    result_remove_span_03 = Remove_Span(result_remove_span_02, 6)
+    # Show_Result(index_list,result_remove_span_03)
+
+    ###########################三次连续通过和尾筛选#################################
+    result_remove_sum_end_01=Remove_Sum(result_remove_span_03,8)
+    result_remove_sum_end_02 = Remove_Sum(result_remove_sum_end_01, 9)
+    result_remove_sum_end_03 = Remove_Sum(result_remove_sum_end_02, 1)
+    # Show_Result(index_list, result_remove_sum_end_03)
+
+    result_remove_special_num=Remove_Special_Num(result_remove_sum_end_03,0)
+    # Show_Result(index_list, result_remove_special_num)
+
+    ###########################通过断组筛选#################################
+    broken_list_01=['567','891','0234']
+    broken_list_02 = ['645', '138', '0927']
+    broken_list_03 = ['259', '036', '147']
+    result_broken_01=Remove_Broken(result_remove_special_num,broken_list_01)
+    result_broken_02 = Remove_Broken(result_broken_01, broken_list_02)
+    result_broken_03 = Remove_Broken(result_broken_02, broken_list_03)
+    Show_Result(index_list,result_broken_03)
     pass
 #################################################调用预测方法模块##########################################################
-
-#################################################测试正确率模块###########################################################
-
-#################################################测试正确率模块###########################################################
 
 def main(args):
     # ##预测结果
     index_list=Get_Index_By_Index_File(args.index_path)
     # print("上一期:",index_list)
-    exclude_key=7#定胆数
-    hundred_key=4#百位筛选键值
-    ten_key=1#十位筛选键值
-    one_key=4#个位筛选键值
+    exclude_key=8#定胆数
+    hundred_key=7#百位筛选键值
+    ten_key=3#十位筛选键值
+    one_key=8#个位筛选键值
 
     Get_Result_Funcation_02(args,index_list,exclude_key)#调用大底定胆方法
     Get_Result_Funcation_03(args, index_list, hundred_key, ten_key, one_key, exclude_key)
 
-    Get_Result_Funcation_01(args,index_list,exclude_key)#预测下一期结果,在data/work_3d_result.txt处查看
-    #Save_CSV_File(args.csv_path,index_list)#保存(即更新csv结果池),该方法只运行一次
+    # Get_Result_Funcation_01(args,index_list,exclude_key)#预测下一期结果,在data/work_3d_result.txt处查看
+    # Save_CSV_File(args.csv_path,index_list)#保存(即更新csv结果池),该方法只运行一次
 
     pass
 
